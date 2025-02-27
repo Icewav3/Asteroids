@@ -10,6 +10,11 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 }
 
+//responsive canvas
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
 function draw() {
   background(220);
 }
