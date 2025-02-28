@@ -15,4 +15,22 @@ class GameObject {
     this._radius = radius;
     this._isActive = isActive;
     }
+    
+    update(){
+    }
+
+    draw(){
+
+    }
+
+    checkEdges(){
+
+    }
+
+    checkCollision(gameObject){
+    }
+
+    destroy(){
+
+    }
 }
