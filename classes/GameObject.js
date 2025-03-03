@@ -5,29 +5,51 @@ class GameObject {
      * @param {p5.Vector} position - The position of the object as a vector.
      * @param {p5.Vector} [velocity=createVector(0, 0)] - The velocity of the object as a vector. Defaults to a vector with zero magnitude.
      * @param {number} rotation - The rotation of the object in radians or degrees.
-     * @param {number} radius - The radius of the object.
+     * @param {list} vertices - The vertices of the polygon
      * @param {boolean} isActive - Indicates whether the object is active.
      */
-  constructor(position, velocity = createVector(0, 0), rotation, radius, isActive){
+  constructor(position, velocity = createVector(0, 0), rotation, vertices, color, isActive){
     this.position = position;
     this.velocity = velocity;
     this._rotation = rotation;
-    this._radius = radius;
+    this.vertices = vertices;
+    this.normals
+    this.color = color;
     this._isActive = isActive;
     }
-    
+
+    //todo should this use translate or just add the position to each verticie?
     update(){
+      if(this._isActive){
+        for (let v of this.vertices) {
+          v.add
+        }
+      }
     }
 
     draw(){
-
+      if(this._isActive){
+        push();
+        fill(this.color);
+        beginShape();
+        for (let v of this.vertices) {
+          vertex(v.x + this.position.x, v.y + this.position.y);
+        }
+        endShape(CLOSE);
+        pop();
+      }
     }
 
-    checkEdges(){
+    checkPolygonCollision(gameObject){
+      let min = Infinity, max = -Infinity;
 
-    }
+      for (let v of gameObject.vertices) {
+        let projection = v.add(this.position).dot(axis); // Project the vertex onto the axis
+        if (projection < min) min = projection;
+        if (projection > max) max = projection;
+      }
 
-    checkCollision(gameObject){
+      return [min, max]; // Return the min/max projection range
     }
 
     destroy(){
