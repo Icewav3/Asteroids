@@ -13,17 +13,14 @@ class GameObject {
     this.velocity = velocity;
     this._rotation = rotation;
     this.vertices = vertices;
-    this.normals
+    this.normals = normals; //todo
     this.color = color;
     this._isActive = isActive;
     }
 
-    //todo should this use translate or just add the position to each verticie?
     update(){
       if(this._isActive){
-        for (let v of this.vertices) {
-          v.add
-        }
+          this.position += this.velocity;
       }
     }
 
@@ -44,7 +41,7 @@ class GameObject {
       let min = Infinity, max = -Infinity;
 
       for (let v of gameObject.vertices) {
-        let projection = v.add(this.position).dot(axis); // Project the vertex onto the axis
+        let projection = v.add(this.position).dot(this.normal); // Project the vertex onto the axis
         if (projection < min) min = projection;
         if (projection > max) max = projection;
       }
