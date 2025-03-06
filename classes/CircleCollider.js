@@ -4,8 +4,8 @@
     this.radius = radius;
   }
 
+  //failsafe
   checkCollision(otherCollider) {
-    // Only handle circle-to-circle collisions
     if (otherCollider instanceof CircleCollider) {
       return this.checkCircleCollision(otherCollider);
     }
@@ -18,6 +18,7 @@
     // Sum of radii
     let radiusSum = this.radius + otherCircleCollider.radius;
     // Collision if distance is less than sum of radii
+    //todo wtf is this
     return distance < radiusSum;
   }
 

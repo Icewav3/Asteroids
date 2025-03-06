@@ -7,12 +7,14 @@ class GameObject {
      * @param {number} rotation - The rotation of the object in radians or degrees.
      * @param {Collider} collider - The collider for this game object
      * @param {color} color - The color of the object
+     * @param drag
      * @param {boolean} isActive - Indicates whether the object is active.
      */
-    constructor(position, velocity = createVector(0, 0), rotation, collider = null, color, isActive = true) {
+    constructor(position, velocity = createVector(0, 0), rotation, collider = null, color, drag = 1, isActive = true) {
         this.position = position;
         this.velocity = velocity;
         this._rotation = rotation;
+        this.drag = drag;
         this.color = color;
         this._isActive = isActive;
 
@@ -25,6 +27,7 @@ class GameObject {
     update() {
         if (this._isActive) {
             this.position = p5.Vector.add(this.position, this.velocity);
+            this.velocity = p5.Vector.mult(this.velocity, this.drag);
         }
         else {
             print("This object is inactive");
@@ -58,5 +61,8 @@ class GameObject {
             return false;
         }
         return this.collider.checkCollision(collidingGameObject.collider);
+    }
+    screenWrap(value, max) {
+        return (value % max + max) % max;
     }
 }

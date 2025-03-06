@@ -1,21 +1,63 @@
 ﻿class Ship extends GameObject{
-    constructor(position, velocity, rotation, vertices, color, isActive, maxHealth, maxSpeed, isInvincible) {
-        super(position, velocity, rotation, vertices, color, isActive);
+    constructor(position = createVector(width/2, height/2), velocity, rotation, collider, color, maxHealth, drag, isInvincible = false, isActive = true) {
+        super(position, velocity, rotation, collider, color, drag, isActive);
         this.maxHealth = maxHealth;
-        this.maxSpeed = maxSpeed;
         this.isInvincible = isInvincible;
+        this.health = maxHealth;
+        this.score = 0;
+        //this.collider = new CircleCollider(this, radius);
     }
 
     update(){
         super.update();
     }
-    draw(){
-        super.draw();
+    draw() {
+        // Wrap the entire position of the ship
+        const wrappedX = super.screenWrap(this.position.x, width);
+        const wrappedY = super.screenWrap(this.position.y, height);
+
+        push();
+        fill(255, 255, 0);
+        noStroke();
+
+        // Now calculate the vertices relative to the wrapped position
+        triangle(
+            wrappedX, wrappedY - 20,
+            wrappedX - 15, wrappedY + 10,
+            wrappedX + 15, wrappedY + 10
+        );
+        pop();
     }
-    checkPolygonCollision(gameObject){
-        super.checkPolygonCollision(gameObject);
+    resetPosition(){
+        this.position = new p5.Vector(width/2, height/2);
+        this.velocity = new p5.Vector(0, 0);
+        this._rotation = 0;
     }
-    destroy(){
-        super.destroy();
+    checkCollision(collidingGameObject) {
+        return super.checkCollision(collidingGameObject);
+    }
+    takeDamage(incomingDamage){
+        if(!this.isInvincible) { //if not invincible
+            this.health -= incomingDamage;
+            if (this.health <= 0) {
+                this.die()
+            }
+            this.isInvincible = true;
+            print("Invincibility timer started");
+            setTimeout(() => this.invincibilityTimerCallback(), 1000);
+        }
+        else{
+            print("Protected from incoming damage");
+        }
+    }
+    invincibilityTimerCallback(){
+        this.isInvincible = false;
+        console.log("Invincibility timer expired");
+    }
+    die(){
+        print("Game Over");
+        this.resetPosition();
+        this.health = this.maxHealth;
+        this.score = 0;
     }
 }
