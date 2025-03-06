@@ -1,70 +1,77 @@
 class GameObject {
-    /**
-     * Creates a new instance of the object with the specified parameters.
-     *
-     * @param {p5.Vector} position - The position of the object as a vector.
-     * @param {p5.Vector} [velocity=createVector(0, 0)] - The velocity of the object as a vector. Defaults to a vector with zero magnitude.
-     * @param {number} rotation - The rotation of the object in radians or degrees.
-     * @param {Collider} collider - The collider for this game object
-     * @param {color} color - The color of the object
-     * @param drag
-     * @param {boolean} isActive - Indicates whether the object is active.
-     */
-    constructor(position, velocity = createVector(0, 0), rotation, collider = null, color, drag = 1, isActive = true) {
-        this.position = position;
-        this.velocity = velocity;
-        this._rotation = rotation;
-        this.drag = drag;
-        this.color = color;
-        this._isActive = isActive;
+  /**
+   * Creates a new instance of the object with the specified parameters.
+   *
+   * @param {p5.Vector} position - The position of the object as a vector.
+   * @param {p5.Vector} [velocity=createVector(0, 0)] - The velocity of the object as a vector. Defaults to a vector with zero magnitude.
+   * @param {number} rotation - The rotation of the object in radians or degrees.
+   * @param {Collider} collider - The collider for this game object
+   * @param {color} color - The color of the object
+   * @param drag
+   * @param {boolean} isActive - Indicates whether the object is active.
+   */
+  constructor(
+    position,
+    velocity = createVector(0, 0),
+    rotation,
+    collider = null,
+    color,
+    drag = 1,
+    isActive = true,
+  ) {
+    this.position = position;
+    this.velocity = velocity;
+    this._rotation = rotation;
+    this.drag = drag;
+    this.color = color;
+    this._isActive = isActive;
 
-        this.collider = collider;
-        if (this.collider) {
-            this.collider.gameObject = this;
-        }
+    this.collider = collider;
+    if (this.collider) {
+      this.collider.gameObject = this;
     }
+  }
 
-    update() {
-        if (this._isActive) {
-            this.position = p5.Vector.add(this.position, this.velocity);
-            this.velocity = p5.Vector.mult(this.velocity, this.drag);
-            this.position.x = this.screenWrap(this.position.x, width);
-            this.position.y = this.screenWrap(this.position.y, height);
-        }
-        else {
-            print("This object is inactive");
-        }
+  update() {
+    if (this._isActive) {
+      this.position = p5.Vector.add(this.position, this.velocity);
+      this.velocity = p5.Vector.mult(this.velocity, this.drag);
+      this.position.x = this.screenWrap(this.position.x, width);
+      this.position.y = this.screenWrap(this.position.y, height);
+    } else {
+      print("This object is inactive");
     }
+  }
 
-    draw() {
-        if (this._isActive) {
-            push();
-            fill(this.color);
+  draw() {
+    if (this._isActive) {
+      push();
+      fill(this.color);
 
-            if (this.collider instanceof PolygonCollider) {
-                beginShape();
-                for (let v of this.collider.vertices) {
-                    vertex(v.x + this.position.x, v.y + this.position.y);
-                }
-                endShape(CLOSE);
-            } else if (this.collider instanceof CircleCollider) {
-                circle(this.position.x, this.position.y, this.collider.radius * 2);
-            }
-
-            pop();
+      if (this.collider instanceof PolygonCollider) {
+        beginShape();
+        for (let v of this.collider.vertices) {
+          vertex(v.x + this.position.x, v.y + this.position.y);
         }
-        else {
-            print("This object is inactive");
-        }
-    }
+        endShape(CLOSE);
+      } else if (this.collider instanceof CircleCollider) {
+        circle(this.position.x, this.position.y, this.collider.radius * 2);
+      }
 
-    checkCollision(collidingGameObject) {
-        if (!this.collider || !collidingGameObject.collider) {
-            return false;
-        }
-        return this.collider.checkCollision(collidingGameObject.collider);
+      pop();
+    } else {
+      print("This object is inactive");
     }
-    screenWrap(value, max) {
-        return (value % max + max) % max;
+  }
+
+  checkCollision(collidingGameObject) {
+    if (!this.collider || !collidingGameObject.collider) {
+      return false;
     }
+    return this.collider.checkCollision(collidingGameObject.collider);
+  }
+
+  screenWrap(value, max) {
+    return ((value % max) + max) % max;
+  }
 }

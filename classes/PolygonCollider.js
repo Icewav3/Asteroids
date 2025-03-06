@@ -51,7 +51,10 @@
 
       // Project other polygon's vertices onto the axis
       for (let v of otherPolygonCollider.vertices) {
-        let projectedVertex = p5.Vector.add(v, otherPolygonCollider.gameObject.position);
+        let projectedVertex = p5.Vector.add(
+          v,
+          otherPolygonCollider.gameObject.position,
+        );
         let projection = projectedVertex.dot(combinedNormals[i]);
         if (projection < min2) min2 = projection;
         if (projection > max2) max2 = projection;
