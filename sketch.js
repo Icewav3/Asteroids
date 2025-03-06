@@ -1,6 +1,6 @@
 let obj1, playerShip;
 let playerShipRotation = 0; // Variable to store rotation for playerShip
-const debug = true;
+const debug = false;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -25,6 +25,13 @@ function setup() {
         0.95
     );
     playerShip.collider.gameObject = playerShip; // Connect collider to game object
+    playerShip.score = 100;
+    print("current score: " + playerShip.score + " current health: " + playerShip.health + "");
+    print("Adding score to player")
+    playerShip.addScore(10000);
+    print("Added score to player")
+    print("current score: " + playerShip.score + " current health: " + playerShip.health + "");
+
 }
 
 function draw() {
@@ -42,16 +49,16 @@ function draw() {
     if(isColliding){
         playerShip.takeDamage(1);
     }
+    noStroke();
+    fill(0);
+    textSize(20);
+    textAlign(CENTER);
+    text(
+        isColliding ? "Collision Detected!" : "No Collision",
+        width / 2,
+        height - 30
+    );
     if (debug){
-        noStroke();
-        fill(0);
-        textSize(20);
-        textAlign(CENTER);
-        text(
-            isColliding ? "Collision Detected!" : "No Collision",
-            width / 2,
-            height - 30
-        );
         // Debug logging!
         textSize(14);
         fill(0);

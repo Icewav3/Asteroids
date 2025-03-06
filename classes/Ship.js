@@ -1,10 +1,11 @@
 ﻿class Ship extends GameObject{
-    constructor(position = createVector(width/2, height/2), velocity, rotation, collider, color, maxHealth, drag, isInvincible = false, isActive = true) {
+    constructor(position = createVector(width/2, height/2), velocity, rotation, collider, color, startingHealth, drag, isInvincible = false, isActive = true) {
         super(position, velocity, rotation, collider, color, drag, isActive);
-        this.maxHealth = maxHealth;
+        this.startingHealth = startingHealth;
         this.isInvincible = isInvincible;
-        this.health = maxHealth;
+        this.health = startingHealth;
         this.score = 0;
+        this.lastHealthMilestone = 0;
         //this.collider = new CircleCollider(this, radius);
     }
 
@@ -54,10 +55,19 @@
         this.isInvincible = false;
         console.log("Invincibility timer expired");
     }
+    addScore(points){
+        this.score += points;
+        if (this.score >= this.lastHealthMilestone + 10000) {
+            this.health += 1;
+            this.lastHealthMilestone += 10000;
+        }
+    }
     die(){
         print("Game Over");
+        print("Your score was: " + this.score);
         this.resetPosition();
-        this.health = this.maxHealth;
+        this.health = this.startingHealth;
         this.score = 0;
+        print("Reset score " + this.score);
     }
 }
