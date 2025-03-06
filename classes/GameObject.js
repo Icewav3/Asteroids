@@ -25,7 +25,7 @@ class GameObject {
     this.drag = drag;
     this.color = color;
     this._isActive = isActive;
-    this.collider = CircleCollider.constructCollider(collider);
+    this.collider = collider;
   }
 
   update() {

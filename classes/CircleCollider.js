@@ -6,7 +6,7 @@
 
   //failsafe
   checkCollision(position, otherGameObject) {
-    if (otherGameObject instanceof CircleCollider) {
+    if (otherGameObject.collider instanceof CircleCollider) {
       return this.checkCircleCollision(position, otherGameObject);
     }
     return false;
@@ -14,11 +14,9 @@
 
   checkCircleCollision(position, otherGameObject) {
     // Distance between centers
-    print(position);
-    print("other " + otherGameObject);
     let distance = p5.Vector.dist(position, otherGameObject.position);
     // Sum of radii
-    let radiusSum = this.radius + otherCircleCollider.radius;
+    let radiusSum = this.radius + otherGameObject.collider.radius;
     // Collision if distance is less than sum of radii
     //todo wtf is this
     return distance < radiusSum;

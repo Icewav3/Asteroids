@@ -7,15 +7,14 @@
     color,
     startingHealth,
     drag,
-    isInvincible = false,
-    isActive = true,
   ) {
-    super(position, velocity, rotation, collider, color, drag, isActive);
+    super(position, velocity, rotation, collider, color, drag);
     this.startingHealth = startingHealth;
-    this.isInvincible = isInvincible;
     this.health = startingHealth;
     this.score = 0;
     this.lastHealthMilestone = 0;
+    this.isActive = true;
+    this.isInvincible = false;
     //this.collider = new CircleCollider(this, radius);
   }
 

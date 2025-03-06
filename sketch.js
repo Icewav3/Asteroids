@@ -10,21 +10,19 @@ function setup() {
     createVector(200, 200), // Position
     createVector(0, 2), // Velocity
     0, // Rotation
-    new CircleCollider(null, 30), // Circle collider with radius 30
+    new CircleCollider(30), // Circle collider with radius 30
     color(255, 0, 0), // Color
   );
-  obj1.collider.gameObject = obj1; // Connect collider to game object
 
   playerShip = new Ship(
     createVector(width / 2, height / 2), // Position (updated to start at mouse position)
     createVector(0, -5), // Static, so no velocity
     0, // Rotation
-    new CircleCollider(null, 40), // Circle collider with radius 40
+    new CircleCollider(40), // Circle collider with radius 40
     color(0, 255, 0), // Color
     3,
     1,
   );
-  playerShip.collider.gameObject = playerShip; // Connect collider to game object
   playerShip.score = 100;
   print(
     "current score: " +
@@ -54,7 +52,6 @@ function draw() {
   playerShip.update();
   playerShip._rotation = playerShipRotation;
   playerShip.draw();
-  print(obj1);
   let isColliding = obj1.checkCollision(playerShip);
 
   if (isColliding) {
