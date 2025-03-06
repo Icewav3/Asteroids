@@ -43,7 +43,7 @@ class GameObject {
                 }
                 endShape(CLOSE);
             } else if (this.collider instanceof CircleCollider) {
-                circle(this.position.x, this.position.y, this.collider.radius * 2);
+                circle(this.position.x % width, this.position.y % height, this.collider.radius * 2);
             }
 
             pop();
