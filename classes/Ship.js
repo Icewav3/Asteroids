@@ -50,6 +50,10 @@
     this._rotation = 0;
   }
 
+  /**
+   * @param collidingGameObject {GameObject}
+   * @returns {boolean}
+   */
   checkCollision(collidingGameObject) {
     return super.checkCollision(collidingGameObject);
   }

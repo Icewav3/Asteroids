@@ -25,7 +25,7 @@ class GameObject {
     this.drag = drag;
     this.color = color;
     this._isActive = isActive;
-    this.collider = collider;
+    this.collider = CircleCollider.constructCollider(collider);
   }
 
   update() {
@@ -64,10 +64,7 @@ class GameObject {
     if (!this.collider || !collidingGameObject.collider) {
       return false;
     }
-    return this.collider.checkCollision(
-      this.position,
-      collidingGameObject.collider,
-    );
+    return this.collider.checkCollision(this.position, collidingGameObject);
   }
 
   screenWrap(value, max) {

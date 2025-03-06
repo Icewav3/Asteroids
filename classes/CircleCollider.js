@@ -14,6 +14,8 @@
 
   checkCircleCollision(position, otherGameObject) {
     // Distance between centers
+    print(position);
+    print("other " + otherGameObject);
     let distance = p5.Vector.dist(position, otherGameObject.position);
     // Sum of radii
     let radiusSum = this.radius + otherCircleCollider.radius;
