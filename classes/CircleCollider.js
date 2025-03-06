@@ -1,25 +1,22 @@
 ﻿class CircleCollider extends Collider {
-  constructor(gameObject, radius) {
-    super(gameObject);
+  constructor(radius) {
+    super();
     this.radius = radius;
   }
 
   //failsafe
-  checkCollision(otherCollider) {
-    if (otherCollider instanceof CircleCollider) {
-      return this.checkCircleCollision(otherCollider);
+  checkCollision(position, otherGameObject) {
+    if (otherGameObject.collider instanceof CircleCollider) {
+      return this.checkCircleCollision(position, otherGameObject);
     }
     return false;
   }
 
-  checkCircleCollision(otherCircleCollider) {
+  checkCircleCollision(position, otherGameObject) {
     // Distance between centers
-    let distance = p5.Vector.dist(
-      this.gameObject.position,
-      otherCircleCollider.gameObject.position,
-    );
+    let distance = p5.Vector.dist(position, otherGameObject.position);
     // Sum of radii
-    let radiusSum = this.radius + otherCircleCollider.radius;
+    let radiusSum = this.radius + otherGameObject.collider.radius;
     // Collision if distance is less than sum of radii
     //todo wtf is this
     return distance < radiusSum;
@@ -35,5 +32,9 @@
       this.radius * 2,
     );
     pop();
+  }
+
+  static constructCollider(radius) {
+    return new CircleCollider(radius);
   }
 }
