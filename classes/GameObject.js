@@ -28,6 +28,8 @@ class GameObject {
         if (this._isActive) {
             this.position = p5.Vector.add(this.position, this.velocity);
             this.velocity = p5.Vector.mult(this.velocity, this.drag);
+            this.position.x = this.screenWrap(this.position.x, width);
+            this.position.y = this.screenWrap(this.position.y, height);
         }
         else {
             print("This object is inactive");
@@ -46,7 +48,7 @@ class GameObject {
                 }
                 endShape(CLOSE);
             } else if (this.collider instanceof CircleCollider) {
-                circle(this.position.x % width, this.position.y % height, this.collider.radius * 2);
+                circle(this.position.x, this.position.y, this.collider.radius * 2);
             }
 
             pop();
