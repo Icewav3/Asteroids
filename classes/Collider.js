@@ -1,10 +1,8 @@
 ﻿class Collider {
-  constructor(gameObject) {
-    this.gameObject = gameObject;
-  }
+  constructor() {}
 
   // To be implemented by derived classes
-  checkCollision(otherCollider) {
+  checkCollision(position, otherGameObject) {
     throw new Error(
       "Method checkCollision must be implemented by derived classes",
     );

@@ -14,7 +14,7 @@ class GameObject {
     position,
     velocity = createVector(0, 0),
     rotation,
-    collider = null,
+    collider = CircleCollider.constructCollider(10),
     color,
     drag = 1,
     isActive = true,
@@ -25,11 +25,7 @@ class GameObject {
     this.drag = drag;
     this.color = color;
     this._isActive = isActive;
-
     this.collider = collider;
-    if (this.collider) {
-      this.collider.gameObject = this;
-    }
   }
 
   update() {
@@ -68,7 +64,10 @@ class GameObject {
     if (!this.collider || !collidingGameObject.collider) {
       return false;
     }
-    return this.collider.checkCollision(collidingGameObject.collider);
+    return this.collider.checkCollision(
+      this.position,
+      collidingGameObject.collider,
+    );
   }
 
   screenWrap(value, max) {
