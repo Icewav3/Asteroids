@@ -1,12 +1,11 @@
 let player;
-let asteroids = [];
+let asteroids;
 let score;
 let gameOver;
 let gameWon;
 let gameStarted;
 let gameOverSound;
 let gameWonSound;
-let currentLevel;
 const maxLevel = 5;
 const minAsteroids = 3;
 const asteroidIncrease = 2;
@@ -14,7 +13,8 @@ const defaultAsteroidSpeed = 1;
 const largeAsteroidRadius = 3;
 class GameManager {
   constructor() {
-    this.setup();
+    this.currentLevel = 1;
+    this.asteroids = [];
   }
 
   setup() {
@@ -35,7 +35,7 @@ class GameManager {
   update() {
     for (let asteroid of this.asteroids) {
       if (
-        this.asteroid.isActive &&
+        asteroid.isActive &&
         this.player.isActive &&
         this.player.checkCollision(asteroid)
       ) {
@@ -47,7 +47,10 @@ class GameManager {
   }
 
   spawnAsteroids() {
-    let numAsteroids = Math.max(minAsteroids, currentLevel * asteroidIncrease);
+    let numAsteroids = Math.max(
+      minAsteroids,
+      this.currentLevel * asteroidIncrease,
+    );
     for (let i = 0; i < numAsteroids; i++) {
       const position = createVector(random(width), random(height));
       const velocity = createVector(
@@ -56,13 +59,13 @@ class GameManager {
       );
       const rotation = random(0);
       const collider = CircleCollider.constructCollider(largeAsteroidRadius);
-      const color = color(150);
+      const asteroidColor = color(150);
       const asteroid = new Asteroid(
         position,
         velocity,
         rotation,
         collider,
-        color,
+        asteroidColor,
         3,
       );
 
