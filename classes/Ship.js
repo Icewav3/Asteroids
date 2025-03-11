@@ -58,11 +58,13 @@
   }
 
   takeDamage(incomingDamage) {
+    let dead = false;
     if (!this.isInvincible) {
       //if not invincible
       this.health -= incomingDamage;
       if (this.health <= 0) {
         this.die();
+        dead = true;
       }
       this.isInvincible = true;
       print("Invincibility timer started");
@@ -70,6 +72,7 @@
     } else {
       print("Protected from incoming damage");
     }
+    return dead;
   }
 
   invincibilityTimerCallback() {
