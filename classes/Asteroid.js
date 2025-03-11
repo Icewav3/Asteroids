@@ -22,7 +22,7 @@
   }
 
   draw() {
-    super.draw();
+    super.draw(5);
   }
 
   update() {

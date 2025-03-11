@@ -46,6 +46,13 @@ class GameManager {
     }
   }
 
+  draw() {
+    this.player.draw();
+    for (let asteroid of this.asteroids) {
+      asteroid.draw();
+    }
+  }
+
   spawnAsteroids() {
     let numAsteroids = Math.max(
       minAsteroids,
