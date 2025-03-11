@@ -1,10 +1,12 @@
 let obj1, playerShip;
 let playerShipRotation = 0; // Variable to store rotation for playerShip
 const debug = false;
+let gameManager;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
+  gameManager = new GameManager();
+  gameManager.setup();
   // Create two GameObject instances with circle colliders
   obj1 = new GameObject(
     createVector(200, 200), // Position
