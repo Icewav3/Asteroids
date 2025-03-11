@@ -6,9 +6,18 @@
    * @param {Collider} collider
    * @param {color} color
    * @param {int} size 3 = large, 2 = medium, 1 = small
+   * @param {boolean} isActive
    */
-  constructor(position, velocity, rotation, collider, color, size) {
-    super(position, velocity, rotation, collider, color, isActive);
+  constructor(
+    position,
+    velocity,
+    rotation,
+    collider,
+    color,
+    size,
+    isActive = true,
+  ) {
+    super(position, velocity, rotation, collider, color, 1, isActive);
     this.size = size;
   }
 
