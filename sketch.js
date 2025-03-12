@@ -31,6 +31,7 @@ function setup() {
 function draw() {
   background(220);
   gameManager.draw();
+  gameManager.update();
 }
 
 function mouseWheel(event) {

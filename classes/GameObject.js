@@ -39,7 +39,7 @@ class GameObject {
     }
   }
 
-  draw(scale = 1) {
+  draw() {
     if (this._isActive) {
       push();
       fill(this.color);
@@ -51,11 +51,7 @@ class GameObject {
         }
         endShape(CLOSE);
       } else if (this.collider instanceof CircleCollider) {
-        circle(
-          this.position.x,
-          this.position.y,
-          this.collider.radius * 2 * scale,
-        );
+        circle(this.position.x, this.position.y, this.collider.radius * 2);
       }
 
       pop();

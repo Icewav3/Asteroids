@@ -9,8 +9,8 @@ let gameWonSound;
 const maxLevel = 5;
 const minAsteroids = 3;
 const asteroidIncrease = 2;
-const defaultAsteroidSpeed = 1;
-const largeAsteroidRadius = 3;
+const defaultAsteroidSpeed = 3;
+const largeAsteroidRadius = 30;
 class GameManager {
   constructor() {
     this.currentLevel = 1;
@@ -34,15 +34,14 @@ class GameManager {
 
   update() {
     for (let asteroid of this.asteroids) {
-      if (
-        asteroid.isActive &&
-        this.player.isActive &&
-        this.player.checkCollision(asteroid)
-      ) {
+      if (asteroid.isActive && this.player.checkCollision(asteroid)) {
         //collision
         this.player.takeDamage(1);
         console.log("Collision detected between player and asteroid");
       }
+    }
+    for (let asteroid of this.asteroids) {
+      asteroid.update();
     }
   }
 
@@ -73,7 +72,7 @@ class GameManager {
         rotation,
         collider,
         asteroidColor,
-        3,
+        30,
       );
 
       this.asteroids.push(asteroid);

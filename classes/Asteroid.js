@@ -5,7 +5,7 @@
    * @param {number} rotation
    * @param {Collider} collider
    * @param {color} color
-   * @param {int} size 3 = large, 2 = medium, 1 = small
+   * @param {int} size 30 = large, 20 = medium, 10 = small
    * @param {boolean} isActive
    */
   constructor(
@@ -22,7 +22,7 @@
   }
 
   draw() {
-    super.draw(5);
+    super.draw();
   }
 
   update() {
@@ -30,7 +30,7 @@
   }
 
   split() {
-    if (this.size >= 3) {
+    if (this.size >= 30) {
       //1st asteroid
       let asteroid1 = this.create(
         this.position,
@@ -38,7 +38,7 @@
         0,
         CircleCollider.constructCollider(this.collider.radius / 2),
         this.color,
-        2,
+        20,
       );
       //2nd asteroid
       let asteroid2 = this.create(
@@ -47,10 +47,10 @@
         0,
         CircleCollider.constructCollider(this.collider.radius / 2),
         this.color,
-        2,
+        20,
       );
       return [asteroid1, asteroid2];
-    } else if (this.size === 2) {
+    } else if (this.size === 20) {
       //1st asteroid
       let asteroid1 = this.create(
         this.position,
@@ -58,7 +58,7 @@
         0,
         CircleCollider.constructCollider(this.collider.radius / 2),
         this.color,
-        1,
+        10,
       );
       //2nd asteroid
       let asteroid2 = this.create(
@@ -67,10 +67,10 @@
         0,
         CircleCollider.constructCollider(this.collider.radius / 2),
         this.color,
-        1,
+        10,
       );
       return [asteroid1, asteroid2];
-    } else if (this.size <= 1) {
+    } else if (this.size <= 10) {
       return [];
     }
     return asteroids;
