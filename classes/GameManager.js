@@ -1,3 +1,5 @@
+// TODO collisions not working
+
 let player;
 let asteroids;
 let score;
@@ -25,7 +27,7 @@ class GameManager {
       createVector(width / 2, height / 2),
       createVector(0, 0),
       0,
-      new CircleCollider(this, 10),
+      new CircleCollider(10),
       color(255, 255, 0),
       3,
       0.95,
@@ -33,6 +35,9 @@ class GameManager {
   }
 
   update() {
+    //update player
+    this.player.update();
+    //check collisions
     for (let asteroid of this.asteroids) {
       if (asteroid.isActive && this.player.checkCollision(asteroid)) {
         //collision
@@ -40,6 +45,7 @@ class GameManager {
         console.log("Collision detected between player and asteroid");
       }
     }
+    //update asteroids
     for (let asteroid of this.asteroids) {
       asteroid.update();
     }
