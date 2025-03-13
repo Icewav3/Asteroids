@@ -68,7 +68,7 @@
       }
       this.isInvincible = true;
       print("Invincibility timer started");
-      setTimeout(() => this.invincibilityTimerCallback(), 1000);
+      setTimeout(() => this.invincibilityTimerCallback(), 3000);
     } else {
       print("Protected from incoming damage");
     }

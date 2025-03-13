@@ -43,19 +43,21 @@
   split() {
     if (this.size >= 30) {
       //1st asteroid
-      let asteroid1 = this.create(
+      let asteroid1 = Asteroid.createAsteroid(
         this.position,
-        this.velocity,
+        this.velocity.mult(2),
         0,
+        random(-1, 1),
         CircleCollider.constructCollider(this.collider.radius / 2),
         this.color,
         20,
       );
       //2nd asteroid
-      let asteroid2 = this.create(
+      let asteroid2 = Asteroid.createAsteroid(
         this.position,
-        -this.velocity,
+        this.velocity.mult(-2),
         0,
+        random(-1, 1),
         CircleCollider.constructCollider(this.collider.radius / 2),
         this.color,
         20,
@@ -63,19 +65,21 @@
       return [asteroid1, asteroid2];
     } else if (this.size === 20) {
       //1st asteroid
-      let asteroid1 = this.create(
+      let asteroid1 = Asteroid.createAsteroid(
         this.position,
         this.velocity,
         0,
+        random(-1, 1),
         CircleCollider.constructCollider(this.collider.radius / 2),
         this.color,
         10,
       );
       //2nd asteroid
-      let asteroid2 = this.create(
+      let asteroid2 = Asteroid.createAsteroid(
         this.position,
-        -this.velocity,
+        this.velocity.mult(-1),
         0,
+        random(-1, 1),
         CircleCollider.constructCollider(this.collider.radius / 2),
         this.color,
         10,
@@ -93,7 +97,23 @@
 
   getPoints() {}
   //Factory Method
-  static create(position, velocity, rotation, collider, color, size) {
-    return new Asteroid(position, velocity, rotation, collider, color, size);
+  static createAsteroid(
+    position,
+    velocity,
+    rotation,
+    angularVelocity,
+    collider,
+    color,
+    size,
+  ) {
+    return new Asteroid(
+      position,
+      velocity,
+      rotation,
+      angularVelocity,
+      collider,
+      color,
+      size,
+    );
   }
 }

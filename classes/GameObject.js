@@ -44,7 +44,6 @@ class GameObject {
   }
 
   draw() {
-    //todo add rotation here
     if (this._isActive) {
       push();
       fill(this.color);

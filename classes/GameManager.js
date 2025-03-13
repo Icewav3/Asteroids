@@ -13,6 +13,8 @@ const minAsteroids = 3;
 const asteroidIncrease = 2;
 const defaultAsteroidSpeed = 3;
 const largeAsteroidRadius = 30;
+const mediumAsteroidRadius = 20;
+const smallAsteroidRadius = 10;
 class GameManager {
   constructor() {
     this.currentLevel = 1;
@@ -40,10 +42,26 @@ class GameManager {
     this.player.update();
     //check collisions
     for (let asteroid of this.asteroids) {
-      if (asteroid.isActive && this.player.checkCollision(asteroid)) {
+      if (asteroid._isActive && this.player.checkCollision(asteroid)) {
         //collision
         this.player.takeDamage(1);
         console.log("Collision detected between player and asteroid");
+
+        // add points per asteroid size
+        if (asteroid.size >= 30) {
+          this.player.addScore(20);
+        } else if (asteroid.size === 20) {
+          this.player.addScore(50);
+        } else if (asteroid.size <= 10) {
+          this.player.addScore(100);
+        }
+        const splitAsteroids = asteroid.split();
+
+        //add split asteroids to the list
+        if (splitAsteroids && splitAsteroids.length > 0) {
+          this.asteroids.push(...splitAsteroids);
+          // "..." = COOL OPERATOR THAT SPREADS THEM
+        }
       }
     }
     //update asteroids

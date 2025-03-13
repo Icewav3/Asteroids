@@ -18,7 +18,6 @@
     // Sum of radii
     let radiusSum = this.radius + otherGameObject.collider.radius;
     // Collision if distance is less than sum of radii
-    //todo wtf is this
     return distance < radiusSum;
   }
 
