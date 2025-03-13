@@ -27,6 +27,7 @@ class GameManager {
       createVector(width / 2, height / 2),
       createVector(0, 0),
       0,
+      0,
       new CircleCollider(10),
       color(255, 255, 0),
       3,
@@ -46,8 +47,14 @@ class GameManager {
       }
     }
     //update asteroids
-    for (let asteroid of this.asteroids) {
-      asteroid.update();
+    if (this.asteroids.length >= 0) {
+      for (let asteroid of this.asteroids) {
+        asteroid.update();
+      }
+    } else {
+      console.log("Level completed");
+      this.currentLevel++;
+      this.spawnAsteroids();
     }
   }
 
@@ -70,12 +77,14 @@ class GameManager {
         random(-defaultAsteroidSpeed, defaultAsteroidSpeed),
       );
       const rotation = random(0);
+      const angularVelocity = random(-1, 1);
       const collider = CircleCollider.constructCollider(largeAsteroidRadius);
       const asteroidColor = color(150);
       const asteroid = new Asteroid(
         position,
         velocity,
         rotation,
+        angularVelocity,
         collider,
         asteroidColor,
         30,

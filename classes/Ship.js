@@ -3,22 +3,27 @@
     position = createVector(width / 2, height / 2),
     velocity,
     rotation,
+    angularVelocity,
     collider,
     color,
     startingHealth,
     drag,
   ) {
-    super(position, velocity, rotation, collider, color, drag);
+    super(position, velocity, rotation, angularVelocity, collider, color, drag);
     this.startingHealth = startingHealth;
     this.health = startingHealth;
     this.score = 0;
     this.lastHealthMilestone = 0;
     this.isActive = true;
     this.isInvincible = false;
-    //this.collider = new CircleCollider(this, radius);
+
+    //Input variables
+    this.rotationSpeed = 0.1;
+    this.thrust = 0.2;
   }
 
   update() {
+    this.handleControls();
     super.update();
   }
 
@@ -28,9 +33,10 @@
     const wrappedY = super.screenWrap(this.position.y, height);
 
     push();
+
     fill(255, 255, 0);
     noStroke();
-
+    rotate(this._rotation);
     // Now calculate the vertices relative to the wrapped position
     triangle(
       wrappedX,
@@ -95,5 +101,24 @@
     this.health = this.startingHealth;
     this.score = 0;
     print("Reset score " + this.score);
+  }
+
+  handleControls() {
+    // Q
+    if (keyIsDown(81)) {
+      this._rotation -= this.rotationSpeed;
+    }
+    // E
+    if (keyIsDown(69)) {
+      this._rotation += this.rotationSpeed;
+    }
+    // W
+    if (keyIsDown(87)) {
+      let thrust = p5.Vector.fromAngle(this._rotation - PI / 2);
+    }
+    // S
+    if (keyIsDown(83)) {
+      //todo warp
+    }
   }
 }

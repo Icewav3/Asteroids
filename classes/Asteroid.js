@@ -3,6 +3,7 @@
    * @param {p5.Vector} position
    * @param {p5.Vector} velocity
    * @param {number} rotation
+   * @param {float} angularVelocity
    * @param {Collider} collider
    * @param {color} color
    * @param {int} size 30 = large, 20 = medium, 10 = small
@@ -12,12 +13,22 @@
     position,
     velocity,
     rotation,
+    angularVelocity,
     collider,
     color,
     size,
     isActive = true,
   ) {
-    super(position, velocity, rotation, collider, color, 1, isActive);
+    super(
+      position,
+      velocity,
+      rotation,
+      angularVelocity,
+      collider,
+      color,
+      1,
+      isActive,
+    );
     this.size = size;
   }
 

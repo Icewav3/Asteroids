@@ -1,4 +1,4 @@
-let obj1, playerShip;
+let playerShip;
 let playerShipRotation = 0; // Variable to store rotation for playerShip
 const debug = false;
 let gameManager;
@@ -32,11 +32,6 @@ function draw() {
   background(220);
   gameManager.draw();
   gameManager.update();
-}
-
-function mouseWheel(event) {
-  playerShipRotation += event.delta > 0 ? 0.1 : -0.1; // Adjust rotation by mouse wheel
-  return false; // Prevent page scrolling
 }
 
 function windowResized() {

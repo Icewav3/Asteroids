@@ -5,15 +5,17 @@ class GameObject {
    * @param {p5.Vector} position - The position of the object as a vector.
    * @param {p5.Vector} [velocity=createVector(0, 0)] - The velocity of the object as a vector. Defaults to a vector with zero magnitude.
    * @param {number} rotation - The rotation of the object in radians or degrees.
+   * @param {number} angularVelocity
    * @param {Collider} collider - The collider for this game object
    * @param {color} color - The color of the object
-   * @param drag
+   * @param {float} drag
    * @param {boolean} isActive - Indicates whether the object is active.
    */
   constructor(
     position,
     velocity = createVector(0, 0),
-    rotation,
+    rotation = 0,
+    angularVelocity = 0,
     collider = CircleCollider.constructCollider(10),
     color,
     drag = 1,
@@ -22,6 +24,7 @@ class GameObject {
     this.position = position;
     this.velocity = velocity;
     this._rotation = rotation;
+    this.angularVelocity = angularVelocity;
     this.drag = drag;
     this.color = color;
     this._isActive = isActive;
@@ -30,6 +33,7 @@ class GameObject {
 
   update() {
     if (this._isActive) {
+      this.rotation += this.angularVelocity;
       this.position = p5.Vector.add(this.position, this.velocity);
       this.velocity = p5.Vector.mult(this.velocity, this.drag);
       this.position.x = this.screenWrap(this.position.x, width);
@@ -40,6 +44,7 @@ class GameObject {
   }
 
   draw() {
+    //todo add rotation here
     if (this._isActive) {
       push();
       fill(this.color);
