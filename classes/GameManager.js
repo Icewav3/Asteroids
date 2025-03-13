@@ -31,7 +31,7 @@ class GameManager {
       new CircleCollider(10),
       color(255, 255, 0),
       3,
-      0.95,
+      0.97,
     );
   }
 

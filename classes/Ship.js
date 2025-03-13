@@ -8,6 +8,8 @@
     color,
     startingHealth,
     drag,
+    thrustPower,
+    rotationPower,
   ) {
     super(position, velocity, rotation, angularVelocity, collider, color, drag);
     this.startingHealth = startingHealth;
@@ -18,8 +20,8 @@
     this.isInvincible = false;
 
     //Input variables
-    this.rotationSpeed = 0.1;
-    this.thrust = 0.2;
+    this.rotationPower = rotationPower || 0.05;
+    this.thrustPower = thrustPower || 0.2;
   }
 
   update() {
@@ -33,19 +35,11 @@
     const wrappedY = super.screenWrap(this.position.y, height);
 
     push();
-
+    translate(wrappedX, wrappedY);
     fill(255, 255, 0);
     noStroke();
     rotate(this._rotation);
-    // Now calculate the vertices relative to the wrapped position
-    triangle(
-      wrappedX,
-      wrappedY - 20,
-      wrappedX - 15,
-      wrappedY + 10,
-      wrappedX + 15,
-      wrappedY + 10,
-    );
+    triangle(0, -20, -15, 10, 15, 10);
     pop();
   }
 
@@ -104,17 +98,19 @@
   }
 
   handleControls() {
-    // Q
-    if (keyIsDown(81)) {
-      this._rotation -= this.rotationSpeed;
+    // A
+    if (keyIsDown(65)) {
+      this._rotation -= this.rotationPower;
     }
-    // E
-    if (keyIsDown(69)) {
-      this._rotation += this.rotationSpeed;
+    // D
+    if (keyIsDown(68)) {
+      this._rotation += this.rotationPower;
     }
     // W
     if (keyIsDown(87)) {
       let thrust = p5.Vector.fromAngle(this._rotation - PI / 2);
+      thrust.mult(this.thrustPower);
+      this.velocity.add(thrust);
     }
     // S
     if (keyIsDown(83)) {
