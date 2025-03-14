@@ -22,6 +22,8 @@
     //Input variables
     this.rotationPower = rotationPower || 0.05;
     this.thrustPower = thrustPower || 0.2;
+    this.invincibilityTime = 100;
+    this.blinker = false;
   }
 
   update() {
@@ -33,16 +35,29 @@
     // Wrap the entire position of the ship
     const wrappedX = super.screenWrap(this.position.x, width);
     const wrappedY = super.screenWrap(this.position.y, height);
-
+    const wrappedPosition = createVector(wrappedX, wrappedY);
     push();
     translate(wrappedX, wrappedY);
     fill(255, 255, 0);
     noStroke();
     rotate(this._rotation);
+    //if invincible blink
+    if (!this.isInvincible) {
+      fill(255, 255, 0);
+      noStroke();
+    } else {
+      noFill();
+      stroke(255, 255, 0);
+    }
     triangle(0, -20, -15, 10, 15, 10);
+    //debug:
+    //this.collider.draw(wrappedPosition);
     pop();
   }
-
+  respawn() {
+    this.resetPosition();
+    this.isActive = true;
+  }
   resetPosition() {
     this.position = new p5.Vector(width / 2, height / 2);
     this.velocity = new p5.Vector(0, 0);
@@ -58,13 +73,11 @@
   }
 
   takeDamage(incomingDamage) {
-    let dead = false;
     if (!this.isInvincible) {
       //if not invincible
       this.health -= incomingDamage;
       if (this.health <= 0) {
         this.die();
-        dead = true;
       }
       this.isInvincible = true;
       print("Invincibility timer started");
@@ -72,17 +85,17 @@
     } else {
       print("Protected from incoming damage");
     }
-    return dead;
   }
 
   invincibilityTimerCallback() {
     this.isInvincible = false;
+    this.blinker = false;
     console.log("Invincibility timer expired");
   }
 
   addScore(points) {
     this.score += points;
-    if (this.score >= this.lastHealthMilestone + 10000) {
+    if (this.score >= this.lastHealthMilestone + this.invincibilityTime) {
       this.health += 1;
       this.lastHealthMilestone += 10000;
     }
@@ -91,7 +104,7 @@
   die() {
     print("Game Over");
     print("Your score was: " + this.score);
-    this.resetPosition();
+    this.isActive = false;
     this.health = this.startingHealth;
     this.score = 0;
     print("Reset score " + this.score);

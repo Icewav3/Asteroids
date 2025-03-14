@@ -3,15 +3,14 @@
 let player;
 let asteroids;
 let score;
-let gameOver;
-let gameWon;
+let gameState = "mainMenu";
 let gameStarted;
 let gameOverSound;
 let gameWonSound;
 const maxLevel = 5;
 const minAsteroids = 3;
 const asteroidIncrease = 2;
-const defaultAsteroidSpeed = 3;
+const defaultAsteroidSpeed = 1;
 const largeAsteroidRadius = 30;
 const mediumAsteroidRadius = 20;
 const smallAsteroidRadius = 10;
@@ -38,41 +37,65 @@ class GameManager {
   }
 
   update() {
-    //update player
-    this.player.update();
-    //check collisions
-    for (let asteroid of this.asteroids) {
-      if (asteroid._isActive && this.player.checkCollision(asteroid)) {
-        //collision
-        this.player.takeDamage(1);
-        console.log("Collision detected between player and asteroid");
-
-        // add points per asteroid size
-        if (asteroid.size >= 30) {
-          this.player.addScore(20);
-        } else if (asteroid.size === 20) {
-          this.player.addScore(50);
-        } else if (asteroid.size <= 10) {
-          this.player.addScore(100);
-        }
-        const splitAsteroids = asteroid.split();
-
-        //add split asteroids to the list
-        if (splitAsteroids && splitAsteroids.length > 0) {
-          this.asteroids.push(...splitAsteroids);
-          // "..." = COOL OPERATOR THAT SPREADS THEM
-        }
-      }
-    }
-    //update asteroids
-    if (this.asteroids.length >= 0) {
-      for (let asteroid of this.asteroids) {
-        asteroid.update();
-      }
-    } else {
-      console.log("Level completed");
-      this.currentLevel++;
+    //main menu state
+    if (gameState === "mainMenu") {
+      this.mainMenu();
+      //gameover state
+    } else if (gameState === "gameOver") {
+      this.player.respawn();
       this.spawnAsteroids();
+      this.currentLevel = 1;
+      gameState = "play";
+      //play state
+    } else if (gameState === "play") {
+      this.gameHud();
+      //update player
+      this.player.update();
+      //check collisions
+      for (let i = this.asteroids.length - 1; i >= 0; i--) {
+        const asteroid = this.asteroids[i];
+        if (
+          asteroid._isActive &&
+          this.player.checkCollision(asteroid) &&
+          !this.player.isInvincible
+        ) {
+          //collision
+          this.player.takeDamage(1);
+          console.log("Collision detected between player and asteroid");
+
+          // add points per asteroid size
+          if (asteroid.size >= 30) {
+            this.player.addScore(20);
+          } else if (asteroid.size === 20) {
+            this.player.addScore(50);
+          } else if (asteroid.size <= 10) {
+            this.player.addScore(100);
+          }
+          const splitAsteroids = asteroid.split();
+          print("Split asteroids: " + splitAsteroids.length);
+          //add split asteroids to the list
+          if (splitAsteroids && splitAsteroids.length > 0) {
+            this.asteroids.push(...splitAsteroids);
+            // "..." = COOL OPERATOR THAT SPREADS THEM
+          }
+
+          //remove the asteroid that was split
+          this.asteroids.splice(i, 1);
+        }
+      }
+      //update asteroids
+      if (!this.player.isActive) {
+        console.log("Game Over");
+        gameState = "gameOver";
+      } else if (this.asteroids.length >= 0) {
+        for (let asteroid of this.asteroids) {
+          asteroid.update();
+        }
+      } else {
+        console.log("Level completed");
+        this.currentLevel++;
+        this.spawnAsteroids();
+      }
     }
   }
 
@@ -84,6 +107,7 @@ class GameManager {
   }
 
   spawnAsteroids() {
+    this.asteroids = [];
     let numAsteroids = Math.max(
       minAsteroids,
       this.currentLevel * asteroidIncrease,
@@ -110,5 +134,44 @@ class GameManager {
 
       this.asteroids.push(asteroid);
     }
+  }
+  mainMenu() {
+    background(0);
+    textAlign(CENTER, CENTER);
+    fill(255);
+    textSize(48);
+    text("Asteroids", width / 2, height / 3);
+
+    // Draw play button
+    const buttonWidth = 200;
+    const buttonHeight = 60;
+    const buttonX = width / 2 - buttonWidth / 2;
+    const buttonY = height / 2;
+
+    fill(0, 200, 0);
+    rect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+    fill(255);
+    textSize(24);
+    text("Play", width / 2, buttonY + buttonHeight / 2);
+
+    // Handle mouse press for play button
+    if (
+      mouseIsPressed &&
+      mouseX > buttonX &&
+      mouseX < buttonX + buttonWidth &&
+      mouseY > buttonY &&
+      mouseY < buttonY + buttonHeight
+    ) {
+      gameState = "play";
+    }
+  }
+  gameHud() {
+    push();
+    textAlign(CENTER, TOP);
+    fill(0);
+    textSize(24);
+    text("Score: " + this.player.score, width / 2, 20);
+    pop();
   }
 }

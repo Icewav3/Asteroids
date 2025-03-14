@@ -21,15 +21,11 @@
     return distance < radiusSum;
   }
 
-  draw(color) {
+  draw() {
     push();
-    stroke(color || 255);
+    stroke(255, 0, 0);
     noFill();
-    circle(
-      this.gameObject.position.x,
-      this.gameObject.position.y,
-      this.radius * 2,
-    );
+    circle(0, 0, this.radius * 2);
     pop();
   }
 

@@ -29,6 +29,7 @@
       1,
       isActive,
     );
+    this.splitForce = 1.1;
     this.size = size;
   }
 
@@ -41,54 +42,50 @@
   }
 
   split() {
-    if (this.size >= 30) {
-      //1st asteroid
-      let asteroid1 = Asteroid.createAsteroid(
-        this.position,
-        this.velocity.mult(2),
-        0,
-        random(-1, 1),
-        CircleCollider.constructCollider(this.collider.radius / 2),
-        this.color,
-        20,
-      );
-      //2nd asteroid
-      let asteroid2 = Asteroid.createAsteroid(
-        this.position,
-        this.velocity.mult(-2),
-        0,
-        random(-1, 1),
-        CircleCollider.constructCollider(this.collider.radius / 2),
-        this.color,
-        20,
-      );
-      return [asteroid1, asteroid2];
-    } else if (this.size === 20) {
-      //1st asteroid
-      let asteroid1 = Asteroid.createAsteroid(
-        this.position,
-        this.velocity,
-        0,
-        random(-1, 1),
-        CircleCollider.constructCollider(this.collider.radius / 2),
-        this.color,
-        10,
-      );
-      //2nd asteroid
-      let asteroid2 = Asteroid.createAsteroid(
-        this.position,
-        this.velocity.mult(-1),
-        0,
-        random(-1, 1),
-        CircleCollider.constructCollider(this.collider.radius / 2),
-        this.color,
-        10,
-      );
-      return [asteroid1, asteroid2];
-    } else if (this.size <= 10) {
+    const asteroids = [];
+
+    if (this.size <= 10) {
       return [];
     }
-    return asteroids;
+
+    const newSize = this.size >= 30 ? 20 : 10;
+    const splitMultiplier =
+      this.size >= 30 ? this.splitForce : this.splitForce * this.splitForce;
+
+    // Create velocity vectors for the two new asteroids
+    const velocity1 = this.velocity.copy().mult(splitMultiplier);
+    const velocity2 = this.velocity.copy().mult(-splitMultiplier);
+
+    // Add slight position offset to prevent immediate collision
+    const position1 = this.position
+      .copy()
+      .add(velocity1.copy().normalize().mult(2));
+    const position2 = this.position
+      .copy()
+      .add(velocity2.copy().normalize().mult(2));
+
+    // Create the two new asteroids
+    const asteroid1 = Asteroid.createAsteroid(
+      position1,
+      velocity1,
+      0,
+      random(-1, 1),
+      CircleCollider.constructCollider(this.collider.radius / 2),
+      this.color,
+      newSize,
+    );
+
+    const asteroid2 = Asteroid.createAsteroid(
+      position2,
+      velocity2,
+      0,
+      random(-1, 1),
+      CircleCollider.constructCollider(this.collider.radius / 2),
+      this.color,
+      newSize,
+    );
+
+    return [asteroid1, asteroid2];
   }
 
   checkCollision(collidingGameObject) {

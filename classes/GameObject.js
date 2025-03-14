@@ -30,6 +30,15 @@ class GameObject {
     this._isActive = isActive;
     this.collider = collider;
   }
+  getPosition() {
+    return this.position;
+  }
+  getRotation() {
+    return this._rotation;
+  }
+  getVelocity() {
+    return this.velocity;
+  }
 
   update() {
     if (this._isActive) {
