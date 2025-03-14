@@ -15,15 +15,14 @@
     this.startingHealth = startingHealth;
     this.health = startingHealth;
     this.score = 0;
-    this.lastHealthMilestone = 0;
+    this.lastHealthMilestone = 10000;
     this.isActive = true;
     this.isInvincible = false;
 
     //Input variables
     this.rotationPower = rotationPower || 0.05;
     this.thrustPower = thrustPower || 0.2;
-    this.invincibilityTime = 100;
-    this.blinker = false;
+    this.invincibilityTime = 3000;
   }
 
   update() {
@@ -73,29 +72,32 @@
   }
 
   takeDamage(incomingDamage) {
-    if (!this.isInvincible) {
-      //if not invincible
-      this.health -= incomingDamage;
-      if (this.health <= 0) {
-        this.die();
-      }
-      this.isInvincible = true;
-      print("Invincibility timer started");
-      setTimeout(() => this.invincibilityTimerCallback(), 3000);
-    } else {
-      print("Protected from incoming damage");
+    console.log("Incoming damage: " + incomingDamage);
+    console.log("Health before: " + this.health);
+    this.health -= incomingDamage;
+    console.log("Health after: " + this.health);
+
+    if (this.health <= 0) {
+      this.die();
     }
+
+    this.isInvincible = true;
+    this.invincibilityTimer();
+  }
+  invincibilityTimer() {
+    this.isInvincible = true;
+    print("Invincibility timer started");
+    setTimeout(() => this.invincibilityTimerCallback(), this.invincibilityTime);
   }
 
   invincibilityTimerCallback() {
     this.isInvincible = false;
-    this.blinker = false;
     console.log("Invincibility timer expired");
   }
 
   addScore(points) {
     this.score += points;
-    if (this.score >= this.lastHealthMilestone + this.invincibilityTime) {
+    if (this.score >= this.lastHealthMilestone) {
       this.health += 1;
       this.lastHealthMilestone += 10000;
     }
@@ -127,7 +129,12 @@
     }
     // S
     if (keyIsDown(83)) {
-      //todo warp
+      //TODO warp
+    }
+
+    // Space
+    if (keyIsDown(32)) {
+      //TODO shoot
     }
   }
 }

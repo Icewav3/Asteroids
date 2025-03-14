@@ -166,12 +166,14 @@ class GameManager {
       gameState = "play";
     }
   }
+
   gameHud() {
     push();
     textAlign(CENTER, TOP);
     fill(0);
     textSize(24);
     text("Score: " + this.player.score, width / 2, 20);
+    text("Health: " + this.player.health, width / 2, 50);
     pop();
   }
 }
