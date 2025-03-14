@@ -5,6 +5,10 @@
     this.normals = this.calculateNormals();
   }
 
+  static create(gameObject, vertices) {
+    return new PolygonCollider(gameObject, vertices);
+  }
+
   calculateNormals() {
     let normals = [];
     for (let i = 0; i < this.vertices.length; i++) {
