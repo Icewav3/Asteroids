@@ -38,16 +38,10 @@ class GameManager {
   }
 
   update() {
-    //main menu state
     if (gameState === "mainMenu") {
       this.mainMenu();
-      //gameover state
     } else if (gameState === "gameOver") {
-      this.player.respawn();
-      this.spawnAsteroids();
-      this.currentLevel = 1;
-      gameState = "play";
-      //play state
+      this.gameOverMenu();
     } else if (gameState === "play") {
       this.gameHud();
       //update player
@@ -56,7 +50,7 @@ class GameManager {
       for (let i = this.asteroids.length - 1; i >= 0; i--) {
         const asteroid = this.asteroids[i];
         if (
-          asteroid._isActive &&
+          asteroid.isActive &&
           this.player.checkCollision(asteroid) &&
           !this.player.isInvincible
         ) {
@@ -164,6 +158,42 @@ class GameManager {
       mouseY > buttonY &&
       mouseY < buttonY + buttonHeight
     ) {
+      gameState = "play";
+    }
+  }
+
+  gameOverMenu() {
+    background(0);
+    textAlign(CENTER, CENTER);
+    fill(255);
+    textSize(48);
+    text("Final Score: " + this.player.getScore(), width / 2, height / 3);
+
+    // Draw play button
+    const buttonWidth = 200;
+    const buttonHeight = 60;
+    const buttonX = width / 2 - buttonWidth / 2;
+    const buttonY = height / 2;
+
+    fill(0, 200, 0);
+    rect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+    fill(255);
+    textSize(24);
+    text("Retry", width / 2, buttonY + buttonHeight / 2);
+
+    // Handle mouse press for play button
+    if (
+      mouseIsPressed &&
+      mouseX > buttonX &&
+      mouseX < buttonX + buttonWidth &&
+      mouseY > buttonY &&
+      mouseY < buttonY + buttonHeight
+    ) {
+      //scene transition
+      this.player.respawn();
+      this.spawnAsteroids();
+      this.currentLevel = 1;
       gameState = "play";
     }
   }

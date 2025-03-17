@@ -61,9 +61,15 @@
     //this.collider.draw(wrappedPosition);
     pop();
   }
+
+  getScore() {
+    return this.score;
+  }
   respawn() {
     this.resetPosition();
     this.isActive = true;
+    this.health = this.startingHealth;
+    this.score = 0;
   }
   resetPosition() {
     this.position = new p5.Vector(width / 2, height / 2);
@@ -86,7 +92,7 @@
     console.log("Health after: " + this.health);
 
     if (this.health <= 0) {
-      this.die();
+      this.isActive = false;
     }
 
     this.isInvincible = true;
@@ -111,14 +117,6 @@
     }
   }
 
-  die() {
-    print("Game Over");
-    print("Your score was: " + this.score);
-    this.isActive = false;
-    this.health = this.startingHealth;
-    this.score = 0;
-    print("Reset score " + this.score);
-  }
   // Bullets
   shoot() {
     if (this.canShoot) {
