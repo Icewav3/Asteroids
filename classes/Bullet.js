@@ -10,16 +10,18 @@
    * @param {color} color - The color of the bullet.
    * @param {float} drag - The drag coefficient for the bullet.
    * @param {boolean} isActive - Indicates whether the bullet is active.
+   * @param {number} [lifetime=1000] - Time in milliseconds until the bullet deactivates.
    */
   constructor(
     position,
     velocity = createVector(0, 0),
     rotation = 0,
     angularVelocity = 0,
-    collider = CircleCollider.constructCollider(5), // Smaller default collider for bullets
+    collider = CircleCollider.constructCollider(3),
     color,
     drag = 1,
     isActive = true,
+    lifetime = 1000,
   ) {
     super(
       position,
@@ -32,36 +34,41 @@
       isActive,
     );
 
-    // Add any bullet-specific properties here
+    // Store the lifetime property
+    this.lifetime = lifetime;
+
+    // Set up the timer that will deactivate the bullet after lifetime milliseconds
+    this.timerId = setTimeout(() => {
+      this.lifetimeCallback();
+    }, this.lifetime);
   }
 
-  getPosition() {
-    return super.getPosition();
-  }
-
-  getRotation() {
-    return super.getRotation();
-  }
-
-  getVelocity() {
-    return super.getVelocity();
+  lifetimeCallback() {
+    this.isActive = false;
+    // Clear the timer to prevent memory leaks
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
   }
 
   update() {
-    super.update();
-    // Add any bullet-specific update logic here
+    if (this.isActive) {
+      super.update();
+    }
   }
 
   draw() {
-    super.draw();
-    // Add any bullet-specific drawing logic here
+    if (this.isActive) {
+      super.draw();
+    }
   }
 
   checkCollision(collidingGameObject) {
-    return super.checkCollision(collidingGameObject);
-  }
-
-  screenWrap(value, max) {
-    return super.screenWrap(value, max);
+    let destroyed = super.checkCollision(collidingGameObject);
+    if (destroyed) {
+      clearTimeout(this.timerId);
+    }
+    return destroyed;
   }
 }

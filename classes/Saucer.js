@@ -10,6 +10,8 @@
    * @param {color} [color] - The color of the saucer.
    * @param {float} [drag=1] - The drag applied to the saucer's movement.
    * @param {boolean} [isActive=true] - Indicates whether the saucer is active.
+   * @param {number} [size=1] - Scale factor for the saucer's size
+   * @param {number} [fireDelay=3] - Time in seconds between shots
    */
   constructor(
     position,
@@ -20,6 +22,8 @@
     color,
     drag = 1,
     isActive = true,
+    size = 1,
+    fireDelay = 3,
   ) {
     super(
       position,
@@ -31,7 +35,9 @@
       drag,
       isActive,
     );
-    // Add any Saucer-specific properties here
+    this.size = size;
+    this.fireDelay = fireDelay;
+    this.bullet = null;
   }
 
   update() {
@@ -40,17 +46,18 @@
   }
 
   draw() {
-    // Draw a simple saucer
+    const wrappedX = super.screenWrap(this.position.x, width);
+    const wrappedY = super.screenWrap(this.position.y, height);
     push();
     noStroke();
-    fill(this.color || "gray"); // Use the color if provided, otherwise default to gray
+    fill(this.color || "orange");
 
     // Body of the saucer (ellipse)
-    ellipse(this.position.x, this.position.y, 40, 20);
+    ellipse(wrappedX, wrappedY, 40, 20 * this.size);
 
     // Dome of the saucer (smaller ellipse)
     fill("lightblue");
-    ellipse(this.position.x, this.position.y - 8, 20, 10);
+    ellipse(wrappedX, wrappedY - 8 * this.size, 20 * this.size, 10 * this.size);
     pop();
   }
 

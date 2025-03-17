@@ -23,10 +23,16 @@
     this.rotationPower = rotationPower || 0.05;
     this.thrustPower = thrustPower || 0.2;
     this.invincibilityTime = 3000;
+    this.shootDelay = 1000;
+    this.bulletLifetime = 1000;
+    this.bulletVelocityMult = 10;
+    this.bullets = [];
+    this.canShoot = true;
   }
 
   update() {
     this.handleControls();
+    this.updateBullets();
     super.update();
   }
 
@@ -35,6 +41,8 @@
     const wrappedX = super.screenWrap(this.position.x, width);
     const wrappedY = super.screenWrap(this.position.y, height);
     const wrappedPosition = createVector(wrappedX, wrappedY);
+    this.drawBullets();
+
     push();
     translate(wrappedX, wrappedY);
     fill(255, 255, 0);
@@ -111,6 +119,65 @@
     this.score = 0;
     print("Reset score " + this.score);
   }
+  // Bullets
+  shoot() {
+    if (this.canShoot) {
+      this.canShoot = false;
+      this.timerId = setTimeout(() => {
+        this.shootCallback();
+      }, this.shootDelay);
+      // Calculate vector
+      let bulletVector = p5.Vector.fromAngle(this._rotation - PI / 2);
+      // Set position
+      let bulletPosition = bulletVector.copy();
+      // Move bullet to the tip of the playership
+      bulletPosition.mult(20);
+      // Add ship position
+      bulletPosition.add(this.position);
+      // Calculate velocity
+      let bulletVelocity = bulletVector.copy();
+      //Mult by multiplier
+      bulletVelocity.mult(this.bulletVelocityMult);
+
+      let bullet = new Bullet(
+        bulletPosition,
+        bulletVelocity,
+        this._rotation,
+        0,
+        CircleCollider.constructCollider(3),
+        "yellow",
+        1,
+        true,
+        this.bulletLifetime,
+      );
+      this.bullets.push(bullet);
+    }
+  }
+
+  shootCallback() {
+    this.canShoot = true;
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+      this.timerId = null;
+    }
+  }
+
+  updateBullets() {
+    for (let i = this.bullets.length - 1; i >= 0; i--) {
+      const bullet = this.bullets[i];
+      if (bullet.isActive) {
+        bullet.update();
+      } else {
+        this.bullets.splice(i, 1);
+      }
+    }
+  }
+
+  drawBullets() {
+    for (let i = 0; i < this.bullets.length; i++) {
+      this.bullets[i].draw();
+    }
+  }
 
   handleControls() {
     // A
@@ -134,7 +201,7 @@
 
     // Space
     if (keyIsDown(32)) {
-      //TODO shoot
+      this.shoot();
     }
   }
 }

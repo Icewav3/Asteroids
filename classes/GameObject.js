@@ -27,7 +27,7 @@ class GameObject {
     this.angularVelocity = angularVelocity;
     this.drag = drag;
     this.color = color;
-    this._isActive = isActive;
+    this.isActive = isActive;
     this.collider = collider;
   }
   getPosition() {
@@ -41,7 +41,7 @@ class GameObject {
   }
 
   update() {
-    if (this._isActive) {
+    if (this.isActive) {
       this.rotation += this.angularVelocity;
       this.position = p5.Vector.add(this.position, this.velocity);
       this.velocity = p5.Vector.mult(this.velocity, this.drag);
@@ -53,7 +53,7 @@ class GameObject {
   }
 
   draw() {
-    if (this._isActive) {
+    if (this.isActive) {
       push();
       fill(this.color);
 

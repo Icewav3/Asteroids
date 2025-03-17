@@ -2,6 +2,7 @@
 
 let player;
 let asteroids;
+let saucers;
 let score;
 let gameState = "mainMenu";
 let gameStarted;
@@ -175,5 +176,9 @@ class GameManager {
     text("Score: " + this.player.score, width / 2, 20);
     text("Health: " + this.player.health, width / 2, 50);
     pop();
+  }
+
+  spawnSaucers() {
+    return;
   }
 }
