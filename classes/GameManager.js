@@ -13,9 +13,7 @@ const defaultAsteroidSpeed = 1;
 const largeAsteroidRadius = 30;
 const mediumAsteroidRadius = 20;
 const smallAsteroidRadius = 10;
-//saucers
-//15 sec timer
-const saucerWaveInterval = 15000;
+
 let saucerWave = 1;
 class GameManager {
   constructor() {
