@@ -23,12 +23,16 @@
     this.rotationPower = rotationPower || 0.05;
     this.thrustPower = thrustPower || 0.2;
     this.invincibilityTime = 3000;
+    //Bullets
     this.shootDelay = 1000;
     this.bulletLifetime = 1000;
     this.bulletVelocityMult = 10;
     this.bullets = [];
     this.canShoot = true;
     this.recoil = 0.25;
+    //Warp
+    this.canWarp = true;
+    this.warpCooldown = 5000;
   }
 
   update() {
@@ -150,8 +154,10 @@
         this.bulletLifetime,
       );
       this.bullets.push(bullet);
-      //TODO apply the recoil variable as accelearationn in the opposite
-      // direction of firing
+      //recoil
+      let recoilVector = bulletVector.copy();
+      recoilVector.mult(-this.recoil);
+      this.velocity.add(recoilVector);
     }
   }
 
@@ -197,12 +203,27 @@
     }
     // S
     if (keyIsDown(83)) {
-      //TODO warp
+      if (this.canWarp) {
+        this.canWarp = false;
+        this.position = createVector(random(width), random(height));
+        this.velocity = createVector(0, 0);
+        this.warpTimerId = setTimeout(() => {
+          this.warpCooldownCallback();
+        }, this.warpCooldown);
+      }
     }
 
     // Space
     if (keyIsDown(32)) {
       this.shoot();
+    }
+  }
+
+  warpCooldownCallback() {
+    this.canWarp = true;
+    if (this.warpTimerId) {
+      clearTimeout(this.warpTimerId);
+      this.warpTimerId = null;
     }
   }
 }
