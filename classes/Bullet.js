@@ -65,10 +65,24 @@
   }
 
   checkCollision(collidingGameObject) {
+    if (!(collidingGameObject instanceof GameObject)) {
+      print("Colliding object is not a GameObject");
+      return false;
+    }
+    if (collidingGameObject instanceof Ship) {
+      print("Bullet collided with ship");
+      return false;
+    }
     let destroyed = super.checkCollision(collidingGameObject);
     if (destroyed) {
-      clearTimeout(this.timerId);
+      this.isActive = false;
+      collidingGameObject.isActive = false;
     }
+
     return destroyed;
+  }
+
+  destroy() {
+    clearTimeout(this.timerId);
   }
 }

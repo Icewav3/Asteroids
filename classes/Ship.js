@@ -28,6 +28,7 @@
     this.bulletVelocityMult = 10;
     this.bullets = [];
     this.canShoot = true;
+    this.recoil = 0.25;
   }
 
   update() {
@@ -149,6 +150,8 @@
         this.bulletLifetime,
       );
       this.bullets.push(bullet);
+      //TODO apply the recoil variable as accelearationn in the opposite
+      // direction of firing
     }
   }
 

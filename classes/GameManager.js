@@ -1,5 +1,3 @@
-// TODO collisions not working
-
 let player;
 let asteroids;
 let saucers;
@@ -49,34 +47,12 @@ class GameManager {
       //check collisions
       for (let i = this.asteroids.length - 1; i >= 0; i--) {
         const asteroid = this.asteroids[i];
-        if (
-          asteroid.isActive &&
-          this.player.checkCollision(asteroid) &&
-          !this.player.isInvincible
-        ) {
-          //collision
-          this.player.takeDamage(1);
-          console.log("Collision detected between player and asteroid");
-
-          // add points per asteroid size
-          if (asteroid.size >= 30) {
-            this.player.addScore(20);
-          } else if (asteroid.size === 20) {
-            this.player.addScore(50);
-          } else if (asteroid.size <= 10) {
-            this.player.addScore(100);
-          }
-          const splitAsteroids = asteroid.split();
-          print("Split asteroids: " + splitAsteroids.length);
-          //add split asteroids to the list
-          if (splitAsteroids && splitAsteroids.length > 0) {
-            this.asteroids.push(...splitAsteroids);
-            // "..." = COOL OPERATOR THAT SPREADS THEM
-          }
-
-          //remove the asteroid that was split
-          this.asteroids.splice(i, 1);
-        }
+        //UPDATE ASTEROIDS LIST
+        this.updateAsteroidsList(asteroid, i);
+        //PLAYER'S BULLETS COLLISION CHECKING
+        this.checkPlayerBulletCollision(asteroid);
+        //PLAYER ASTEROID COLLISION
+        this.checkPlayerAsteroidCollision(asteroid);
       }
       //update asteroids
       if (!this.player.isActive) {
@@ -210,5 +186,32 @@ class GameManager {
 
   spawnSaucers() {
     return;
+  }
+
+  checkPlayerBulletCollision(object) {
+    this.player.bullets.forEach((bullet) => {
+      bullet.checkCollision(object);
+    });
+  }
+  checkPlayerAsteroidCollision(asteroid) {
+    if (this.player.checkCollision(asteroid) && !this.player.isInvincible) {
+      this.player.takeDamage(1);
+      asteroid.isActive = false;
+      console.log("Collision detected between player and asteroid");
+    }
+  }
+  updateAsteroidsList(asteroid, index) {
+    if (!asteroid.isActive) {
+      const splitAsteroids = asteroid.destroy();
+      //add split asteroids to the list
+      if (splitAsteroids && splitAsteroids.length > 0) {
+        this.asteroids.push(...splitAsteroids);
+        // "..." = COOL OPERATOR THAT SPREADS THEM
+      }
+      let score = asteroid.getScore();
+      this.player.addScore(score);
+      //remove the asteroid that was split
+      this.asteroids.splice(index, 1);
+    }
   }
 }

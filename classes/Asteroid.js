@@ -88,11 +88,25 @@
     return [asteroid1, asteroid2];
   }
 
+  getScore() {
+    let score = 0;
+    if (this.size >= 30) {
+      score = 20;
+    } else if (this.size === 20) {
+      score = 50;
+    } else if (this.size <= 10) {
+      score = 100;
+    }
+    return score;
+  }
+
   checkCollision(collidingGameObject) {
     return super.checkCollision(collidingGameObject);
   }
 
-  getPoints() {}
+  destroy() {
+    return this.split();
+  }
   //Factory Method
   static createAsteroid(
     position,

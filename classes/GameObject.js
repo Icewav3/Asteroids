@@ -83,4 +83,5 @@ class GameObject {
   screenWrap(value, max) {
     return ((value % max) + max) % max;
   }
+  destroy() {}
 }
