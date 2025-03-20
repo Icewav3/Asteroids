@@ -60,7 +60,7 @@ class GameManager {
       if (!this.player.isActive) {
         console.log("Game Over");
         gameState = "gameOver";
-      } else if (this.asteroids.length >= 0) {
+      } else if (this.asteroids.length > 0) {
         for (let asteroid of this.asteroids) {
           asteroid.update();
         }

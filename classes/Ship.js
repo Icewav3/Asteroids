@@ -33,6 +33,10 @@
     //Warp
     this.canWarp = true;
     this.warpCooldown = 5000;
+    //timer
+    this.warpTimerId = null;
+    this.invincibilityTimerId = null;
+    this.shootTimerId = null;
   }
 
   update() {
@@ -106,12 +110,17 @@
   invincibilityTimer() {
     this.isInvincible = true;
     print("Invincibility timer started");
-    setTimeout(() => this.invincibilityTimerCallback(), this.invincibilityTime);
+    this.invincibilityTimerId = setTimeout(
+      () => this.invincibilityTimerCallback(),
+      this.invincibilityTime,
+    );
   }
 
   invincibilityTimerCallback() {
     this.isInvincible = false;
     console.log("Invincibility timer expired");
+    clearTimeout(this.invincibilityTimerId);
+    this.invincibilityTimerId = null;
   }
 
   addScore(points) {
@@ -126,7 +135,7 @@
   shoot() {
     if (this.canShoot) {
       this.canShoot = false;
-      this.timerId = setTimeout(() => {
+      this.shootTimerId = setTimeout(() => {
         this.shootCallback();
       }, this.shootDelay);
       // Calculate vector
@@ -163,9 +172,9 @@
 
   shootCallback() {
     this.canShoot = true;
-    if (this.timerId) {
-      clearTimeout(this.timerId);
-      this.timerId = null;
+    if (this.shootTimerId) {
+      clearTimeout(this.shootTimerId);
+      this.shootTimerId = null;
     }
   }
 
