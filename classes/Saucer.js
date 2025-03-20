@@ -11,7 +11,7 @@
    * @param {float} [drag=1] - The drag applied to the saucer's movement.
    * @param {boolean} [isActive=true] - Indicates whether the saucer is active.
    * @param {number} [size=1] - Scale factor for the saucer's size
-   * @param {number} [fireDelay=3] - Time in seconds between shots
+   * @param {number} shootDelay
    */
   constructor(
     position,
@@ -23,7 +23,7 @@
     drag = 1,
     isActive = true,
     size = 1,
-    fireDelay = 3,
+    shootDelay = 3000,
   ) {
     super(
       position,
@@ -36,7 +36,7 @@
       isActive,
     );
     this.size = size;
-    this.shootDelay = 1000;
+    this.shootDelay = shootDelay;
     this.bulletLifetime = 1000;
     this.bulletVelocityMult = 10;
     this.bullets = [];
@@ -46,6 +46,9 @@
   update() {
     super.update();
     this.updateBullets();
+    if (this.canShoot) {
+      this.shoot();
+    }
   }
 
   draw() {
