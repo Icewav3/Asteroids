@@ -61,7 +61,7 @@
     fill(this.color || "orange");
 
     // Body of the saucer (ellipse)
-    ellipse(wrappedX, wrappedY, 40, 20 * this.size);
+    ellipse(wrappedX, wrappedY, 40 * this.size, 20 * this.size);
 
     // Dome of the saucer (smaller ellipse)
     fill("lightblue");
@@ -96,11 +96,14 @@
         this.shootCallback();
       }, this.shootDelay);
 
+      // Calculate direction vector toward player ship
+      let directionToPlayer = p5.Vector.sub(playerShip.position, this.position);
+      // Get angle from direction vector
+      let angleToPlayer = directionToPlayer.heading();
+
       // Calculate base vector angle with random offset based on accuracy
       const randomOffset = random(-accuracy, accuracy);
-      let bulletVector = p5.Vector.fromAngle(
-        this._rotation - PI / 2 + randomOffset,
-      );
+      let bulletVector = p5.Vector.fromAngle(angleToPlayer + randomOffset);
 
       // Set position
       let bulletPosition = bulletVector.copy();
@@ -116,7 +119,7 @@
       let bullet = new Bullet(
         bulletPosition,
         bulletVelocity,
-        this._rotation + randomOffset,
+        angleToPlayer + randomOffset, // Use angleToPlayer instead of this._rotation
         0,
         CircleCollider.constructCollider(3),
         "orange",
