@@ -15,6 +15,7 @@ const mediumAsteroidRadius = 20;
 const smallAsteroidRadius = 10;
 
 let saucerWave = 1;
+let saucerWaveScoreInterval = 1000;
 class GameManager {
   constructor() {
     this.currentLevel = 1;
@@ -46,6 +47,13 @@ class GameManager {
       this.gameHud();
       //update player
       this.player.update();
+      if (
+        this.player.score - this.saucerWaveScoreInterval * this.saucerWave >
+        0
+      ) {
+        this.spawnSaucers();
+        this.saucerWave++;
+      }
       //check collisions
       for (let i = this.asteroids.length - 1; i >= 0; i--) {
         const asteroid = this.asteroids[i];
@@ -172,6 +180,7 @@ class GameManager {
       this.player.respawn();
       this.spawnAsteroids();
       this.currentLevel = 1;
+      this.saucerWave = 1;
       gameState = "play";
     }
   }
@@ -187,7 +196,7 @@ class GameManager {
   }
 
   spawnSaucers() {
-    return;
+    //TODO
   }
 
   checkPlayerBulletCollision(object) {
@@ -215,5 +224,12 @@ class GameManager {
       //remove the asteroid that was split
       this.asteroids.splice(index, 1);
     }
+  }
+
+  updateSaucers() {
+    //TODO
+  }
+  checkSaucerAsteroidCollision(asteroid) {
+    //TODO
   }
 }

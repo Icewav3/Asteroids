@@ -41,13 +41,14 @@
     this.bulletVelocityMult = 10;
     this.bullets = [];
     this.canShoot = true;
+    this.ImproveAimScore = 1000;
   }
 
   update() {
     super.update();
     this.updateBullets();
     if (this.canShoot) {
-      this.shoot();
+      this.tryShoot();
     }
   }
 
@@ -71,18 +72,39 @@
   checkCollision(collidingGameObject) {
     return super.checkCollision(collidingGameObject);
   }
+  tryShoot(playerShip) {
+    if (!playerShip) return;
+
+    if (this.size > 1) {
+      // large saucer
+      // very bad accuracy (high value means more random deviation)
+      this.shoot(playerShip, 0.5);
+    } else if (playerShip.score > this.ImproveAimScore) {
+      // small saucer with good accuracy
+      this.shoot(playerShip, 0.1); // Good accuracy = small random deviation
+    } else {
+      // small saucer with average accuracy
+      this.shoot(playerShip, 0.25); // Average accuracy
+    }
+  }
+
   // Bullets
-  shoot() {
+  shoot(playerShip, accuracy) {
     if (this.canShoot) {
       this.canShoot = false;
       this.timerId = setTimeout(() => {
         this.shootCallback();
       }, this.shootDelay);
-      // Calculate vector
-      let bulletVector = p5.Vector.fromAngle(this._rotation - PI / 2);
+
+      // Calculate base vector angle with random offset based on accuracy
+      const randomOffset = random(-accuracy, accuracy);
+      let bulletVector = p5.Vector.fromAngle(
+        this._rotation - PI / 2 + randomOffset,
+      );
+
       // Set position
       let bulletPosition = bulletVector.copy();
-      // Move bullet to the tip of the playership
+      // Move bullet to the tip of the saucer
       bulletPosition.mult(20);
       // Add ship position
       bulletPosition.add(this.position);
@@ -94,10 +116,10 @@
       let bullet = new Bullet(
         bulletPosition,
         bulletVelocity,
-        this._rotation,
+        this._rotation + randomOffset,
         0,
         CircleCollider.constructCollider(3),
-        "yellow",
+        "orange",
         1,
         true,
         this.bulletLifetime,
