@@ -186,11 +186,8 @@ class GameManager {
       mouseY > buttonY &&
       mouseY < buttonY + buttonHeight
     ) {
+      this.resetGame();
       //scene transition
-      this.player.respawn();
-      this.spawnAsteroids();
-      this.currentLevel = 1;
-      lastSaucerWave = 500;
       gameState = "play";
     }
   }
@@ -336,5 +333,14 @@ class GameManager {
         });
       }
     }
+  }
+
+  resetGame() {
+    this.player.respawn();
+    this.spawnAsteroids();
+    this.currentLevel = 1;
+    lastSaucerWave = 500;
+    asteroids = [];
+    saucers = [];
   }
 }
