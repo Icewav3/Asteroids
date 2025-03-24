@@ -6,6 +6,7 @@ let gameState = "mainMenu";
 let gameStarted;
 let gameOverSound;
 let gameWonSound;
+let currentLevel = 1;
 const maxLevel = 5;
 const minAsteroids = 3;
 const asteroidIncrease = 2;
