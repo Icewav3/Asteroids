@@ -3,9 +3,6 @@ let asteroids = [];
 let saucers = [];
 let score;
 let gameState = "mainMenu";
-let gameStarted;
-let gameOverSound;
-let gameWonSound;
 let currentLevel = 1;
 const maxLevel = 5;
 const minAsteroids = 3;
@@ -20,10 +17,16 @@ let saucerWaveScoreInterval = 500;
 const smallSaucerSize = 1;
 const bigSaucerSize = 2;
 const chanceOfSmallSaucer = 0.3;
+
 class GameManager {
   constructor() {
     this.currentLevel = 1;
     this.asteroids = [];
+    this.explosionSound = explosionSound;
+    this.saucerSound = saucerSound;
+    this.shootSound = shootSound;
+    this.engineSound = engineSound;
+    this.jumpSound = jumpSound;
   }
 
   setup() {
@@ -39,6 +42,11 @@ class GameManager {
       color(255, 255, 0),
       3,
       0.97,
+      0.2,
+      0.05,
+      jumpSound,
+      engineSound,
+      shootSound,
     );
   }
 
@@ -219,6 +227,7 @@ class GameManager {
     if (!asteroid.isActive) {
       const splitAsteroids = asteroid.destroy();
       //add split asteroids to the list
+      explosionSound.play();
       if (splitAsteroids && splitAsteroids.length > 0) {
         this.asteroids.push(...splitAsteroids);
         // "..." = COOL OPERATOR THAT SPREADS THEM
@@ -303,6 +312,7 @@ class GameManager {
       // Remove inactive saucers
       if (!saucer.isActive) {
         saucer.destroy();
+        this.explosionSound.play();
         const points = saucer.size > 1 ? 200 : 500;
         this.player.addScore(points);
         saucers.splice(i, 1);
@@ -312,7 +322,11 @@ class GameManager {
 
   checkSaucerAsteroidCollision(asteroid) {
     if (!saucers || saucers.length === 0) {
+      saucerSound.stop();
       return;
+    }
+    if (!saucerSound.isPlaying()) {
+      saucerSound.play();
     }
 
     for (let i = saucers.length - 1; i >= 0; i--) {

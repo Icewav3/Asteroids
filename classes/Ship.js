@@ -10,6 +10,9 @@
     drag,
     thrustPower,
     rotationPower,
+    warpSound,
+    EngineSound,
+    ShootSound,
   ) {
     super(position, velocity, rotation, angularVelocity, collider, color, drag);
     this.startingHealth = startingHealth;
@@ -18,6 +21,11 @@
     this.lastHealthMilestone = 10000;
     this.isActive = true;
     this.isInvincible = false;
+    //sound
+
+    this.shootSound = ShootSound;
+    this.EngineSound = EngineSound;
+    this.warpSound = warpSound;
 
     //Input variables
     this.rotationPower = rotationPower || 0.05;
@@ -134,6 +142,7 @@
   // Bullets
   shoot() {
     if (this.canShoot) {
+      this.shootSound.play();
       this.canShoot = false;
       this.shootTimerId = setTimeout(() => {
         this.shootCallback();
@@ -204,15 +213,10 @@
     if (keyIsDown(68)) {
       this._rotation += this.rotationPower;
     }
-    // W
-    if (keyIsDown(87)) {
-      let thrust = p5.Vector.fromAngle(this._rotation - PI / 2);
-      thrust.mult(this.thrustPower);
-      this.velocity.add(thrust);
-    }
     // S
     if (keyIsDown(83)) {
       if (this.canWarp) {
+        this.warpSound.play();
         this.canWarp = false;
         this.position = createVector(random(width), random(height));
         this.velocity = createVector(0, 0);
@@ -221,10 +225,22 @@
         }, this.warpCooldown);
       }
     }
-
     // Space
     if (keyIsDown(32)) {
       this.shoot();
+    }
+    // W
+    if (keyIsDown(87)) {
+      if (!this.EngineSound.isPlaying()) {
+        this.EngineSound.play();
+      }
+      let thrust = p5.Vector.fromAngle(this._rotation - PI / 2);
+      thrust.mult(this.thrustPower);
+      this.velocity.add(thrust);
+    } else {
+      if (this.EngineSound.isPlaying()) {
+        this.EngineSound.stop();
+      }
     }
   }
 
