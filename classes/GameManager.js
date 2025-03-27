@@ -60,7 +60,7 @@ class GameManager {
       //update player
 
       this.player.update();
-      // check saucer spawn conditoin
+      // check saucer spawn condition
       if (this.player.score >= lastSaucerWave) {
         lastSaucerWave += saucerWaveScoreInterval;
         this.spawnSaucers();
