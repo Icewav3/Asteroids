@@ -42,6 +42,12 @@ class GameManager {
   }
 
   setup() {
+    explosionSound.setVolume(0.3);
+    saucerSound.setVolume(0.2);
+    shootSound.setVolume(0.3);
+    engineSound.setVolume(0.2);
+    jumpSound.setVolume(0.5);
+
     //spawn asteroids
     this.spawnAsteroids();
     //spawn player
