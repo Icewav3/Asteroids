@@ -83,106 +83,108 @@ class GameManager {
   }
 
   tutorial() {
-    // Set background
     background(0);
+    // responsivenessss
+    const headerHeight = height * 0.1;
+    const contentHeight = height * 0.7;
+    const footerHeight = height * 0.2;
 
-    // Title for the tutorial section
+    const imageSize = min(width * 0.15, height * 0.12);
+    const horizontalPadding = width * 0.05;
+    const verticalSpacing = contentHeight / 6;
+
+    // title
     fill(255);
-    textSize(36);
-    textAlign(CENTER, TOP);
-    text("Controls", width / 2, 50);
+    textSize(min(width * 0.05, 36));
+    textAlign(CENTER, CENTER);
+    text("CONTROLS", width / 2, headerHeight / 2);
 
-    // Load and display keyboard images with descriptions
-    const imageWidth = 100;
-    const imageHeight = 100;
-    const spacing = 120; // Vertical spacing between controls
-    const startY = 150; // Starting Y position for the first control
-    const textOffsetX = 150; // Horizontal distance between image and text
+    // starting pos
+    const startY = headerHeight + verticalSpacing / 2;
 
-    // A key
-    image(
-      keyA,
-      width / 2 - textOffsetX - imageWidth / 2,
-      startY,
-      imageWidth,
-      imageHeight,
-    );
-    fill(255);
-    textSize(24);
+    // text
     textAlign(LEFT, CENTER);
-    text("Turns left", width / 2 - textOffsetX / 2, startY + imageHeight / 2);
+    textSize(min(width * 0.03, 24));
+    fill(255);
 
-    // D key
+    // layout
+    const keyX = width * 0.3;
+    const textX = width * 0.45;
+    const textMaxWidth = width * 0.5;
+
+    // A
+    image(keyA, keyX - imageSize / 2, startY, imageSize, imageSize);
+    text("Turns left", textX, startY + imageSize / 2);
+
+    // D
     image(
       keyD,
-      width / 2 - textOffsetX - imageWidth / 2,
-      startY + spacing,
-      imageWidth,
-      imageHeight,
+      keyX - imageSize / 2,
+      startY + verticalSpacing,
+      imageSize,
+      imageSize,
     );
-    text(
-      "Turns right",
-      width / 2 - textOffsetX / 2,
-      startY + spacing + imageHeight / 2,
-    );
+    text("Turns right", textX, startY + verticalSpacing + imageSize / 2);
 
-    // W key
+    // W
     image(
       keyW,
-      width / 2 - textOffsetX - imageWidth / 2,
-      startY + spacing * 2,
-      imageWidth,
-      imageHeight,
+      keyX - imageSize / 2,
+      startY + verticalSpacing * 2,
+      imageSize,
+      imageSize,
     );
     text(
       "Thrusts forward",
-      width / 2 - textOffsetX / 2,
-      startY + spacing * 2 + imageHeight / 2,
+      textX,
+      startY + verticalSpacing * 2 + imageSize / 2,
     );
 
-    // S key
+    // S
     image(
       keyS,
-      width / 2 - textOffsetX - imageWidth / 2,
-      startY + spacing * 3,
-      imageWidth,
-      imageHeight,
+      keyX - imageSize / 2,
+      startY + verticalSpacing * 3,
+      imageSize,
+      imageSize,
     );
     text(
       "Teleports to a random location",
-      width / 2 - textOffsetX / 2,
-      startY + spacing * 3 + imageHeight / 2,
+      textX,
+      startY + verticalSpacing * 3 + imageSize / 2,
     );
 
     // Space
     image(
       keySpace,
-      width / 2 - textOffsetX - imageWidth / 2,
-      startY + spacing * 4,
-      imageWidth,
-      imageHeight,
+      keyX - imageSize / 2,
+      startY + verticalSpacing * 4,
+      imageSize,
+      imageSize,
     );
     text(
       "Shoots a bullet",
-      width / 2 - textOffsetX / 2,
-      startY + spacing * 4 + imageHeight / 2,
+      textX,
+      startY + verticalSpacing * 4 + imageSize / 2,
     );
 
-    // Play button
-    const buttonWidth = 200;
-    const buttonHeight = 60;
+    // playyyyy
+    const buttonWidth = min(width * 0.3, 250);
+    const buttonHeight = min(height * 0.08, 60);
     const buttonX = width / 2 - buttonWidth / 2;
-    const buttonY = startY + spacing * 5 + 20;
+    const buttonY = height - footerHeight / 2 - buttonHeight / 2;
 
+    // button render
     fill(0, 200, 0);
     rect(buttonX, buttonY, buttonWidth, buttonHeight);
 
+    // button text
     fill(255);
-    textSize(24);
+    textSize(min(width * 0.03, 24));
     textAlign(CENTER, CENTER);
-    text("Start Game", width / 2, buttonY + buttonHeight / 2);
+    text("START GAME", width / 2, buttonY + buttonHeight / 2);
 
-    // button
+    // Handle mouse press for play button
     if (
       mouseIsPressed &&
       mouseX > buttonX &&
