@@ -17,6 +17,10 @@ let saucerWaveScoreInterval = 500;
 const smallSaucerSize = 1;
 const bigSaucerSize = 2;
 const chanceOfSmallSaucer = 0.3;
+//screenshake
+let screenShake = false;
+let screenShakeDuration = 100;
+let screenShakeTimer;
 
 class GameManager {
   constructor() {
@@ -94,6 +98,10 @@ class GameManager {
   }
 
   draw() {
+    print(screenShake);
+    if (screenShake) {
+      translate(random(0, 6), random(0, 6));
+    }
     this.player.draw();
     for (let asteroid of this.asteroids) {
       asteroid.draw();
@@ -219,6 +227,7 @@ class GameManager {
   checkPlayerAsteroidCollision(asteroid) {
     if (this.player.checkCollision(asteroid) && !this.player.isInvincible) {
       this.player.takeDamage(1);
+      this.startScreenShake();
       asteroid.isActive = false;
       console.log("Collision detected between player and asteroid");
     }
@@ -298,6 +307,7 @@ class GameManager {
         saucer.bullets.forEach((bullet) => {
           if (this.player.checkCollision(bullet) && !this.player.isInvincible) {
             this.player.takeDamage(1);
+            this.startScreenShake();
             bullet.isActive = false;
           }
         });
@@ -306,6 +316,7 @@ class GameManager {
       // Check if saucer collides with player
       if (this.player.checkCollision(saucer) && !this.player.isInvincible) {
         this.player.takeDamage(1);
+        this.startScreenShake();
         saucer.isActive = false;
       }
 
@@ -357,5 +368,17 @@ class GameManager {
     lastSaucerWave = 500;
     asteroids = [];
     saucers = [];
+  }
+
+  startScreenShake() {
+    screenShake = true;
+    screenShakeTimer = setTimeout(() => {
+      this.screenShakeCallback();
+    }, screenShakeDuration);
+  }
+
+  screenShakeCallback() {
+    screenShake = false;
+    clearTimeout(this.screenShakeTimer);
   }
 }
