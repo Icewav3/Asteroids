@@ -66,11 +66,11 @@
 
   checkCollision(collidingGameObject) {
     if (!(collidingGameObject instanceof GameObject)) {
-      print("Colliding object is not a GameObject");
+      //print("Colliding object is not a GameObject");
       return false;
     }
     if (collidingGameObject instanceof Ship) {
-      print("Bullet collided with ship");
+      //print("Bullet collided with ship");
       return false;
     }
     let destroyed = super.checkCollision(collidingGameObject);

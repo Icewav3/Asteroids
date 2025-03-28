@@ -21,6 +21,8 @@ const chanceOfSmallSaucer = 0.3;
 let screenShake = false;
 let screenShakeDuration = 100;
 let screenShakeTimer;
+//tutorial
+let tutorialPassed = false;
 
 class GameManager {
   constructor() {
@@ -31,6 +33,12 @@ class GameManager {
     this.shootSound = shootSound;
     this.engineSound = engineSound;
     this.jumpSound = jumpSound;
+    //key icons
+    this.keyW = keyW;
+    this.keyA = keyA;
+    this.KeyD = keyD;
+    this.keyS = keyS;
+    this.keySpace = keySpace;
   }
 
   setup() {
@@ -60,45 +68,164 @@ class GameManager {
     } else if (gameState === "gameOver") {
       this.gameOverMenu();
     } else if (gameState === "play") {
-      this.gameHud();
-      //update player
-
-      this.player.update();
-      // check saucer spawn condition
-      if (this.player.score >= lastSaucerWave) {
-        lastSaucerWave += saucerWaveScoreInterval;
-        this.spawnSaucers();
-      }
-      this.updateSaucers();
-      //check collisions
-      for (let i = this.asteroids.length - 1; i >= 0; i--) {
-        const asteroid = this.asteroids[i];
-        //UPDATE ASTEROIDS LIST
-        this.updateAsteroidsList(asteroid, i);
-        //PLAYER'S BULLETS COLLISION CHECKING
-        this.checkPlayerBulletCollision(asteroid);
-        //PLAYER ASTEROID COLLISION
-        this.checkPlayerAsteroidCollision(asteroid);
-        this.checkSaucerAsteroidCollision(asteroid);
-      }
-      //update asteroids
-      if (!this.player.isActive) {
-        console.log("Game Over");
-        gameState = "gameOver";
-      } else if (this.asteroids.length > 0) {
-        for (let asteroid of this.asteroids) {
-          asteroid.update();
-        }
+      if (tutorialPassed) {
+        this.gameLoop();
       } else {
-        console.log("Level completed");
-        currentLevel++;
-        this.spawnAsteroids();
+        this.tutorial();
       }
     }
   }
 
+  tutorial() {
+    // Set background
+    background(0);
+
+    // Title for the tutorial section
+    fill(255);
+    textSize(36);
+    textAlign(CENTER, TOP);
+    text("Controls", width / 2, 50);
+
+    // Load and display keyboard images with descriptions
+    const imageWidth = 100;
+    const imageHeight = 100;
+    const spacing = 120; // Vertical spacing between controls
+    const startY = 150; // Starting Y position for the first control
+    const textOffsetX = 150; // Horizontal distance between image and text
+
+    // A key
+    image(
+      keyA,
+      width / 2 - textOffsetX - imageWidth / 2,
+      startY,
+      imageWidth,
+      imageHeight,
+    );
+    fill(255);
+    textSize(24);
+    textAlign(LEFT, CENTER);
+    text("Turns left", width / 2 - textOffsetX / 2, startY + imageHeight / 2);
+
+    // D key
+    image(
+      keyD,
+      width / 2 - textOffsetX - imageWidth / 2,
+      startY + spacing,
+      imageWidth,
+      imageHeight,
+    );
+    text(
+      "Turns right",
+      width / 2 - textOffsetX / 2,
+      startY + spacing + imageHeight / 2,
+    );
+
+    // W key
+    image(
+      keyW,
+      width / 2 - textOffsetX - imageWidth / 2,
+      startY + spacing * 2,
+      imageWidth,
+      imageHeight,
+    );
+    text(
+      "Thrusts forward",
+      width / 2 - textOffsetX / 2,
+      startY + spacing * 2 + imageHeight / 2,
+    );
+
+    // S key
+    image(
+      keyS,
+      width / 2 - textOffsetX - imageWidth / 2,
+      startY + spacing * 3,
+      imageWidth,
+      imageHeight,
+    );
+    text(
+      "Teleports to a random location",
+      width / 2 - textOffsetX / 2,
+      startY + spacing * 3 + imageHeight / 2,
+    );
+
+    // Space
+    image(
+      keySpace,
+      width / 2 - textOffsetX - imageWidth / 2,
+      startY + spacing * 4,
+      imageWidth,
+      imageHeight,
+    );
+    text(
+      "Shoots a bullet",
+      width / 2 - textOffsetX / 2,
+      startY + spacing * 4 + imageHeight / 2,
+    );
+
+    // Play button
+    const buttonWidth = 200;
+    const buttonHeight = 60;
+    const buttonX = width / 2 - buttonWidth / 2;
+    const buttonY = startY + spacing * 5 + 20;
+
+    fill(0, 200, 0);
+    rect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+    fill(255);
+    textSize(24);
+    textAlign(CENTER, CENTER);
+    text("Start Game", width / 2, buttonY + buttonHeight / 2);
+
+    // button
+    if (
+      mouseIsPressed &&
+      mouseX > buttonX &&
+      mouseX < buttonX + buttonWidth &&
+      mouseY > buttonY &&
+      mouseY < buttonY + buttonHeight
+    ) {
+      tutorialPassed = true;
+      this.player.respawn();
+    }
+  }
+  gameLoop() {
+    this.gameHud();
+    //update player
+
+    this.player.update();
+    // check saucer spawn condition
+    if (this.player.score >= lastSaucerWave) {
+      lastSaucerWave += saucerWaveScoreInterval;
+      this.spawnSaucers();
+    }
+    this.updateSaucers();
+    //check collisions
+    for (let i = this.asteroids.length - 1; i >= 0; i--) {
+      const asteroid = this.asteroids[i];
+      //UPDATE ASTEROIDS LIST
+      this.updateAsteroidsList(asteroid, i);
+      //PLAYER'S BULLETS COLLISION CHECKING
+      this.checkPlayerBulletCollision(asteroid);
+      //PLAYER ASTEROID COLLISION
+      this.checkPlayerAsteroidCollision(asteroid);
+      this.checkSaucerAsteroidCollision(asteroid);
+    }
+    //update asteroids
+    if (!this.player.isActive) {
+      //console.log("Game Over");
+      gameState = "gameOver";
+    } else if (this.asteroids.length > 0) {
+      for (let asteroid of this.asteroids) {
+        asteroid.update();
+      }
+    } else {
+      //console.log("Level completed");
+      currentLevel++;
+      this.spawnAsteroids();
+    }
+  }
+
   draw() {
-    print(screenShake);
     if (screenShake) {
       translate(random(0, 6), random(0, 6));
     }
@@ -229,7 +356,7 @@ class GameManager {
       this.player.takeDamage(1);
       this.startScreenShake();
       asteroid.isActive = false;
-      console.log("Collision detected between player and asteroid");
+      //console.log("Collision detected between player and asteroid");
     }
   }
   updateAsteroidsList(asteroid, index) {

@@ -30,7 +30,10 @@
     //Input variables
     this.rotationPower = rotationPower || 0.05;
     this.thrustPower = thrustPower || 0.2;
+    //invinciblity
     this.invincibilityTime = 3000;
+    //invinciblity on respawn
+    this.invincibilityTimeRespawn = 1000;
     //Bullets
     this.shootDelay = 1000;
     this.bulletLifetime = 1000;
@@ -87,6 +90,7 @@
     this.isActive = true;
     this.health = this.startingHealth;
     this.score = 0;
+    this.invincibilityTimer(this.invincibilityTimeRespawn);
   }
   resetPosition() {
     this.position = new p5.Vector(width / 2, height / 2);
@@ -103,30 +107,30 @@
   }
 
   takeDamage(incomingDamage) {
-    console.log("Incoming damage: " + incomingDamage);
-    console.log("Health before: " + this.health);
+    //console.log("Incoming damage: " + incomingDamage);
+    //console.log("Health before: " + this.health);
     this.health -= incomingDamage;
-    console.log("Health after: " + this.health);
+    //console.log("Health after: " + this.health);
 
     if (this.health <= 0) {
       this.isActive = false;
     }
 
     this.isInvincible = true;
-    this.invincibilityTimer();
+    this.invincibilityTimer(this.invincibilityTime);
   }
-  invincibilityTimer() {
+  invincibilityTimer(iFrames) {
     this.isInvincible = true;
-    print("Invincibility timer started");
+    //print("Invincibility timer started");
     this.invincibilityTimerId = setTimeout(
       () => this.invincibilityTimerCallback(),
-      this.invincibilityTime,
+      iFrames,
     );
   }
 
   invincibilityTimerCallback() {
     this.isInvincible = false;
-    console.log("Invincibility timer expired");
+    //console.log("Invincibility timer expired");
     clearTimeout(this.invincibilityTimerId);
     this.invincibilityTimerId = null;
   }

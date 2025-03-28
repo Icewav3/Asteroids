@@ -48,7 +48,7 @@ class GameObject {
       this.position.x = this.screenWrap(this.position.x, width);
       this.position.y = this.screenWrap(this.position.y, height);
     } else {
-      print("This object is inactive");
+      //print("This object is inactive");
     }
   }
 
@@ -69,7 +69,7 @@ class GameObject {
 
       pop();
     } else {
-      print("This object is inactive");
+      //print("This object is inactive");
     }
   }
 
